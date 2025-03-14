@@ -1,127 +1,99 @@
-<!-- src/components/layout/VitalSigns.vue -->
 <template>
-  <div class="vital-signs">
-    <div class="vital-sign-card">
-      <img src="@/assets/icons/respiratory.svg" alt="Respiratory Rate" class="vital-icon" />
-      <div class="vital-data">
-        <h3 class="vital-title">Respiratory Rate</h3>
-        <span class="vital-value">{{ respiratoryValue }} bpm</span>
-        <span class="vital-status">{{ respiratoryStatus }}</span>
-      </div>
+  <div class="vital-card" :class="statusClass">
+    <div class="vital-icon">
+      <img v-if="iconSrc" :src="iconSrc" :alt="vitalSign.name" />
     </div>
-
-    <div class="vital-sign-card">
-      <img src="@/assets/icons/temperature.svg" alt="Temperature" class="vital-icon" />
-      <div class="vital-data">
-        <h3 class="vital-title">Temperature</h3>
-        <span class="vital-value">{{ temperatureValue }}°F</span>
-        <span class="vital-status">{{ temperatureStatus }}</span>
-      </div>
-    </div>
-
-    <div class="vital-sign-card">
-      <img src="@/assets/icons/heartBPM.svg" alt="Heart Rate" class="vital-icon" />
-      <div class="vital-data">
-        <h3 class="vital-title">Heart Rate</h3>
-        <span class="vital-value">{{ heartRateValue }} bpm</span>
-        <span class="vital-status" :class="{ lower: heartRateStatus === 'Lower than Average' }">
-          <img
-            v-if="heartRateStatus === 'Lower than Average'"
-            src="@/assets/icons/ArrowDown.svg"
-            alt="Down Arrow"
-          />
-          {{ heartRateStatus }}
-        </span>
+    <div class="vital-info">
+      <h4>{{ vitalSign.name }}</h4>
+      <div class="vital-value">{{ vitalSign.value }}</div>
+      <div class="vital-status">
+        <span v-if="isLowStatus">▼</span>
+        {{ vitalSign.status }}
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+const icons = import.meta.glob('@/assets/icons/*.svg', { eager: true })
+
 export default {
   name: 'VitalSigns',
   props: {
-    latestData: {
+    vitalSign: {
       type: Object,
       required: true,
     },
   },
   computed: {
-    respiratoryValue() {
-      return this.latestData?.respiratory_rate?.value || 'N/A'
+    isLowStatus() {
+      return this.vitalSign.status.includes('Lower')
     },
-    respiratoryStatus() {
-      return this.latestData?.respiratory_rate?.levels || 'Normal'
+    statusClass() {
+      console.log('this.vitalSign.status', this.vitalSign.name)
+      if (this.vitalSign.name === 'Heart Rate') return 'color-heart'
+      if (this.vitalSign.name.includes('Temperature')) return 'color-temperature'
+      if (this.vitalSign.name.includes('Respiratory Rate')) return 'color-respiratory'
+      return ''
     },
-    temperatureValue() {
-      return this.latestData?.temperature?.value || 'N/A'
-    },
-    temperatureStatus() {
-      return this.latestData?.temperature?.levels || 'Normal'
-    },
-    heartRateValue() {
-      return this.latestData?.heart_rate?.value || 'N/A'
-    },
-    heartRateStatus() {
-      return this.latestData?.heart_rate?.levels || 'Normal'
+    iconSrc() {
+      return icons[`/src/assets/icons/${this.vitalSign.icon}`]?.default || null
     },
   },
 }
 </script>
-
 <style scoped>
-.vital-signs {
+.vital-card {
+  border-radius: 10px;
+  padding: 1.5rem;
   display: flex;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.vital-sign-card {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  background-color: var(--bg-secondary-color);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.vital-card.status-low {
+  background-color: #fff0f0;
 }
 
 .vital-icon {
   width: 96px;
   height: 96px;
-  margin-right: 1.5rem;
-}
-
-.vital-data {
+  border-radius: 50%;
+  background-color: white;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.vital-title {
+.vital-icon img {
+  width: 96px;
+  height: 96px;
+}
+
+.vital-info h4 {
   font-size: 0.9rem;
-  color: var(--text-secondary-color);
-  margin-bottom: 0.5rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
 }
 
 .vital-value {
   font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
 }
 
 .vital-status {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  color: #666;
 }
 
-.vital-status.lower {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--accent-blue);
+.color-heart {
+  background-color: #ffe6f1;
 }
-
-.vital-status img {
-  width: 10px;
-  height: 5px;
+.color-respiratory {
+  background-color: #e0f3fa;
+}
+.color-temperature {
+  background-color: #ffe6e9;
 }
 </style>

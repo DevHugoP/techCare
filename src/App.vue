@@ -17,10 +17,9 @@
             @select-patient="selectPatient"
           />
           <div class="patient-details-wrapper">
-            <DiagnosticList :diagnostics="selectedPatient.diagnostics || []" />
+            <DiagnosticHistory :patient="selectedPatient || []" />
             <DiagnosticList :diagnostics="selectedPatient.diagnostics || []" />
           </div>
-
           <div class="medical-data">
             <PatientInfoSidebar :patient="selectedPatient" />
             <LabResult :labResults="selectedPatient.labResults || []" />
@@ -99,7 +98,6 @@ export default {
 </script>
 
 <style scoped>
-/* Empêcher le défilement horizontal et vertical */
 html,
 body {
   margin: 0; /* Éviter les marges par défaut qui pourraient provoquer un défilement */
@@ -156,6 +154,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  max-width: 60%;
 }
 
 .medical-data {

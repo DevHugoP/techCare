@@ -1,224 +1,298 @@
-<!-- src/components/layout/BloodPressureChart.vue -->
 <template>
-  <div class="blood-pressure-chart card">
-    <div class="chart-header">
-      <h3 class="section-title">Blood Pressure</h3>
-      <div class="dropdown">
-        <span>Last 6 months</span>
-        <img src="@/assets/icons/chevron-down.svg" alt="Dropdown arrow" />
+  <div class="chart-section">
+    <div class="header-chart-wrapper">
+      <div class="chart-header">
+        <h3>Blood Pressure</h3>
+        <div class="time-filter">
+          <span>Last 6 months</span>
+          <img src="@/assets/icons/chevron-down.svg" alt="Dropdown" />
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas ref="bpChart"></canvas>
       </div>
     </div>
 
-    <div class="metrics">
-      <div class="metric">
-        <span class="metric-label">
-          <span class="dot systolic-dot"></span>
-          Systolic
-        </span>
-        <span class="metric-value">{{ systolicValue }}</span>
-        <span class="metric-status" :class="{ higher: systolicStatus === 'Higher than Average' }">
-          <img
-            v-if="systolicStatus === 'Higher than Average'"
-            src="@/assets/icons/ArrowUp.svg"
-            alt="Up Arrow"
-          />
-          <img v-else src="@/assets/icons/ArrowDown.svg" alt="Down Arrow" />
-          {{ systolicStatus }}
-        </span>
+    <div class="bp-indicators indicators-wrapper">
+      <div class="bp-indicator">
+        <div class="dot-label-wrapper">
+          <div class="indicator-dot systolic"></div>
+          <span>Systolic</span>
+        </div>
+
+        <div class="bp-value">{{ chartData.current.systolic }}</div>
+        <div class="bp-status high">Higher than Average</div>
       </div>
 
-      <div class="metric">
-        <span class="metric-label">
-          <span class="dot diastolic-dot"></span>
-          Diastolic
-        </span>
-        <span class="metric-value">{{ diastolicValue }}</span>
-        <span class="metric-status" :class="{ lower: diastolicStatus === 'Lower than Average' }">
-          <img
-            v-if="diastolicStatus === 'Higher than Average'"
-            src="@/assets/icons/ArrowUp.svg"
-            alt="Up Arrow"
-          />
-          <img v-else src="@/assets/icons/ArrowDown.svg" alt="Down Arrow" />
-          {{ diastolicStatus }}
-        </span>
+      <div class="bp-indicator">
+        <div class="dot-label-wrapper">
+          <div class="indicator-dot diastolic"></div>
+          <span>Diastolic</span>
+        </div>
+        <div class="bp-value">{{ chartData.current.diastolic }}</div>
+        <div class="bp-status low">Lower than Average</div>
       </div>
-    </div>
-
-    <!-- SVG Chart - Simplified static representation -->
-    <div class="chart-container">
-      <svg width="100%" height="200" viewBox="0 0 600 200">
-        <!-- Grid lines -->
-        <line x1="0" y1="0" x2="600" y2="0" stroke="#f6f7f8" stroke-width="1" />
-        <line x1="0" y1="50" x2="600" y2="50" stroke="#f6f7f8" stroke-width="1" />
-        <line x1="0" y1="100" x2="600" y2="100" stroke="#f6f7f8" stroke-width="1" />
-        <line x1="0" y1="150" x2="600" y2="150" stroke="#f6f7f8" stroke-width="1" />
-
-        <!-- Systolic line (example) -->
-        <path
-          d="M50,120 L150,80 L250,130 L350,90 L450,110 L550,50"
-          fill="none"
-          stroke="#f05b66"
-          stroke-width="3"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-
-        <!-- Diastolic line (example) -->
-        <path
-          d="M50,150 L150,140 L250,160 L350,130 L450,150 L550,140"
-          fill="none"
-          stroke="#74cef5"
-          stroke-width="3"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-
-        <!-- Systolic data points -->
-        <circle cx="50" cy="120" r="5" fill="#f05b66" />
-        <circle cx="150" cy="80" r="5" fill="#f05b66" />
-        <circle cx="250" cy="130" r="5" fill="#f05b66" />
-        <circle cx="350" cy="90" r="5" fill="#f05b66" />
-        <circle cx="450" cy="110" r="5" fill="#f05b66" />
-        <circle cx="550" cy="50" r="5" fill="#f05b66" />
-
-        <!-- Diastolic data points -->
-        <circle cx="50" cy="150" r="5" fill="#74cef5" />
-        <circle cx="150" cy="140" r="5" fill="#74cef5" />
-        <circle cx="250" cy="160" r="5" fill="#74cef5" />
-        <circle cx="350" cy="130" r="5" fill="#74cef5" />
-        <circle cx="450" cy="150" r="5" fill="#74cef5" />
-        <circle cx="550" cy="140" r="5" fill="#74cef5" />
-
-        <!-- X-axis labels -->
-        <text x="50" y="190" text-anchor="middle" fill="#707070" font-size="12">Oct. 2023</text>
-        <text x="150" y="190" text-anchor="middle" fill="#707070" font-size="12">Nov. 2023</text>
-        <text x="250" y="190" text-anchor="middle" fill="#707070" font-size="12">Dec. 2023</text>
-        <text x="350" y="190" text-anchor="middle" fill="#707070" font-size="12">Jan. 2024</text>
-        <text x="450" y="190" text-anchor="middle" fill="#707070" font-size="12">Feb. 2024</text>
-        <text x="550" y="190" text-anchor="middle" fill="#707070" font-size="12">Mar. 2024</text>
-      </svg>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import Chart from 'chart.js/auto'
+
 export default {
   name: 'BloodPressureChart',
   props: {
-    latestData: {
+    chartData: {
       type: Object,
       required: true,
     },
-    historyData: {
-      type: Array,
-      default: () => [],
+  },
+  data() {
+    return {
+      chart: null as Chart | null,
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.createChart()
+    })
+  },
+  watch: {
+    chartData: {
+      deep: true,
+      handler() {
+        this.$nextTick(() => {
+          this.updateChart()
+        })
+      },
     },
   },
-  computed: {
-    systolicValue() {
-      return this.latestData?.blood_pressure?.systolic?.value || 'N/A'
+  methods: {
+    createChart() {
+      // Vérifier que l'élément canvas existe
+      const chartElem = this.$refs.bpChart as HTMLCanvasElement | undefined
+      if (!chartElem) {
+        console.error('Canvas element not found')
+        return
+      }
+
+      const ctx = chartElem.getContext('2d')
+      if (!ctx) {
+        console.error('Unable to get 2D context')
+        return
+      }
+
+      // Vérifier que les données existent et ont un historique
+      if (!this.chartData || !this.chartData.history || this.chartData.history.length === 0) {
+        console.error('No chart data available')
+        return
+      }
+
+      // Tri des données par date (du plus ancien au plus récent)
+      const sortedHistory = [...this.chartData.history].sort((a, b) => {
+        const monthOrder = {
+          January: 1,
+          February: 2,
+          March: 3,
+          April: 4,
+          May: 5,
+          June: 6,
+          July: 7,
+          August: 8,
+          September: 9,
+          October: 10,
+          November: 11,
+          December: 12,
+        }
+
+        const [monthA, yearA] = a.month.split('. ')
+        const [monthB, yearB] = b.month.split('. ')
+
+        if (yearA !== yearB) {
+          return parseInt(yearA) - parseInt(yearB)
+        }
+
+        return monthOrder[monthA] - monthOrder[monthB]
+      })
+
+      const labels = sortedHistory.map((item) => item.month)
+      const systolicData = sortedHistory.map((item) => item.systolic)
+      const diastolicData = sortedHistory.map((item) => item.diastolic)
+
+      this.chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Systolic',
+              data: systolicData,
+              borderColor: '#D174E3',
+              backgroundColor: 'rgba(209, 116, 227, 0.2)', // Ajout d'un fond transparent
+              tension: 0.4,
+              pointBackgroundColor: '#D174E3',
+              pointRadius: 4,
+              fill: true, // Remplir la zone sous la courbe
+            },
+            {
+              label: 'Diastolic',
+              data: diastolicData,
+              borderColor: '#6A6DCD',
+              backgroundColor: 'rgba(106, 109, 205, 0.2)', // Ajout d'un fond transparent
+              tension: 0.4,
+              pointBackgroundColor: '#6A6DCD',
+              pointRadius: 4,
+              fill: true, // Remplir la zone sous la courbe
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false,
+              suggestedMin: 60,
+              suggestedMax: 180,
+              grid: {
+                color: '#eee',
+              },
+            },
+            x: {
+              grid: {
+                display: false,
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+        },
+      })
     },
-    diastolicValue() {
-      return this.latestData?.blood_pressure?.diastolic?.value || 'N/A'
+    updateChart() {
+      // Détruire l'ancien graphique s'il existe
+      if (this.chart) {
+        this.chart.destroy()
+      }
+
+      // Recréer le graphique avec les nouvelles données
+      this.createChart()
     },
-    systolicStatus() {
-      return this.latestData?.blood_pressure?.systolic?.levels || 'N/A'
-    },
-    diastolicStatus() {
-      return this.latestData?.blood_pressure?.diastolic?.levels || 'N/A'
-    },
+  },
+  beforeUnmount() {
+    // S'assurer que le graphique est détruit avant de démonter le composant
+    if (this.chart) {
+      this.chart.destroy()
+    }
   },
 }
 </script>
 
 <style scoped>
-.blood-pressure-chart {
-  margin-bottom: 1.5rem;
+.chart-section {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
 }
-
+.header-chart-wrapper {
+  max-width: 60%;
+}
 .chart-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.dropdown {
+.indicators-wrapper {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+.dot-label-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.chart-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.time-filter {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--text-secondary-color);
+  color: #666;
   cursor: pointer;
 }
 
-.dropdown img {
-  width: 10px;
-  height: 6px;
+.chart-container {
+  height: 200px;
+  margin-bottom: 1rem;
 }
 
-.metrics {
+.bp-indicators {
   display: flex;
-  gap: 3rem;
-  margin-bottom: 1.5rem;
+  gap: 2rem;
 }
 
-.metric {
+.bp-indicator {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.metric-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--text-secondary-color);
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
+.indicator-dot {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
+  margin-bottom: 0.25rem;
 }
 
-.systolic-dot {
-  background-color: var(--accent-red);
+.indicator-dot.systolic {
+  background-color: #d174e3;
 }
 
-.diastolic-dot {
-  background-color: var(--accent-blue);
+.indicator-dot.diastolic {
+  background-color: #6a6dcd;
 }
 
-.metric-value {
+.bp-value {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.metric-status {
+.bp-status {
+  font-size: 0.8rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
 }
 
-.metric-status.higher {
-  color: var(--accent-red);
+.bp-status.high::before {
+  content: '▲';
+  margin-right: 0.25rem;
 }
 
-.metric-status.lower {
-  color: var(--accent-blue);
+.bp-status.low::before {
+  content: '▼';
+  margin-right: 0.25rem;
 }
 
-.metric-status img {
-  width: 10px;
-  height: 5px;
+.bp-status.high {
+  color: #e74c3c;
 }
 
-.chart-container {
-  width: 100%;
-  padding-top: 1rem;
+.bp-status.low {
+  color: #3498db;
 }
 </style>

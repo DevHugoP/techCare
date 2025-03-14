@@ -2,26 +2,25 @@
   <div class="diagnostic-list card">
     <h3 class="section-title">Diagnostic List</h3>
 
-    <table class="diagnostic-table">
-      <thead>
-        <tr class="table-header">
-          <th>Problem/Diagnosis</th>
-          <th>Description</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(diag, index) in diagnostics" :key="index">
-          <td>{{ diag.name }}</td>
-          <td>{{ diag.description }}</td>
-          <td>
-            <span class="status-badge">
-              {{ diag.status }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table class="diagnostic-table">
+        <thead>
+          <tr>
+            <th>Problem/Diagnosis</th>
+            <th>Description</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="(diag, index) in diagnostics" :key="index">
+            <td>{{ diag.name }}</td>
+            <td>{{ diag.description }}</td>
+            <td>{{ diag.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -39,38 +38,53 @@ export default {
 </script>
 
 <style scoped>
-.diagnostic-list {
-  margin-bottom: 2rem;
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary-color);
+  margin-bottom: 3rem;
 }
+
+.table-wrapper {
+  overflow: scroll;
+}
+
 .diagnostic-table {
-  width: 100%;
   border-spacing: 0;
-  border-collapse: collapse; /* Ajouté pour supprimer l'espace entre les bordures */
-  overflow: hidden; /* Permet de masquer les coins qui ne suivent pas le border-radius */
-  border-radius: 2rem; /* Ajoute un border-radius au tableau */
 }
 
-.table-header {
-  background-color: var(--bg-main-color);
+.diagnostic-table thead tr {
+  background-color: #f5f6fa;
+  border-radius: 20px;
 }
 
-.diagnostic-table th,
-.diagnostic-table td {
-  padding: 1rem;
+.diagnostic-table thead tr th {
+  padding: 12px 16px;
   text-align: left;
-  border-bottom: 1px solid var(--bg-main-color);
+  font-weight: 600;
+  color: var(--text-primary-color);
+  font-size: 14px;
 }
 
-.diagnostic-table th {
-  font-weight: 500;
-  color: var(--text-secondary-color);
-  font-size: 0.9rem;
-  /* Ajoute un border-radius spécifique aux coins du header */
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
+.diagnostic-table thead tr th:first-child {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 
-.diagnostic-table td {
-  font-size: 0.95rem;
+.diagnostic-table thead tr th:last-child {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.diagnostic-table tbody tr td {
+  padding: 16px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-main-color);
+}
+
+/* Colonne Status avec texte en gris */
+.diagnostic-table tbody tr td:last-child {
+  color: var(--text-main-color);
 }
 </style>
