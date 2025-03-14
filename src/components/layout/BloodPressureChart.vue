@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="chart-container">
-        <canvas ref="bpChart"></canvas>
+        <canvas class="canvas" ref="bpChart"></canvas>
       </div>
     </div>
 
@@ -19,7 +19,6 @@
           <div class="indicator-dot systolic"></div>
           <span>Systolic</span>
         </div>
-
         <div class="bp-value">{{ chartData.current.systolic }}</div>
         <div class="bp-status high">Higher than Average</div>
       </div>
@@ -50,11 +49,13 @@ export default {
   data() {
     return {
       chart: null as Chart | null,
+      resizeObserver: null as ResizeObserver | null,
     }
   },
   mounted() {
     this.$nextTick(() => {
       this.createChart()
+      this.observeResize()
     })
   },
   watch: {
@@ -69,26 +70,14 @@ export default {
   },
   methods: {
     createChart() {
-      // Vérifier que l'élément canvas existe
       const chartElem = this.$refs.bpChart as HTMLCanvasElement | undefined
-      if (!chartElem) {
-        console.error('Canvas element not found')
-        return
-      }
+      if (!chartElem) return
 
       const ctx = chartElem.getContext('2d')
-      if (!ctx) {
-        console.error('Unable to get 2D context')
-        return
-      }
+      if (!ctx) return
 
-      // Vérifier que les données existent et ont un historique
-      if (!this.chartData || !this.chartData.history || this.chartData.history.length === 0) {
-        console.error('No chart data available')
-        return
-      }
+      if (!this.chartData || !this.chartData.history || this.chartData.history.length === 0) return
 
-      // Tri des données par date (du plus ancien au plus récent)
       const sortedHistory = [...this.chartData.history].sort((a, b) => {
         const monthOrder = {
           January: 1,
@@ -115,7 +104,11 @@ export default {
         return monthOrder[monthA] - monthOrder[monthB]
       })
 
-      const labels = sortedHistory.map((item) => item.month)
+      const labels = sortedHistory.map((item) => {
+        const parts = item.month.split(' ')
+        const shortMonth = parts[0].slice(0, 3)
+        return `${shortMonth}, ${parts[1]}`
+      })
       const systolicData = sortedHistory.map((item) => item.systolic)
       const diastolicData = sortedHistory.map((item) => item.diastolic)
 
@@ -128,21 +121,19 @@ export default {
               label: 'Systolic',
               data: systolicData,
               borderColor: '#D174E3',
-              backgroundColor: 'rgba(209, 116, 227, 0.2)', // Ajout d'un fond transparent
+              backgroundColor: 'rgba(209, 116, 227, 0.2)',
               tension: 0.4,
               pointBackgroundColor: '#D174E3',
               pointRadius: 4,
-              fill: true, // Remplir la zone sous la courbe
             },
             {
               label: 'Diastolic',
               data: diastolicData,
               borderColor: '#6A6DCD',
-              backgroundColor: 'rgba(106, 109, 205, 0.2)', // Ajout d'un fond transparent
+              backgroundColor: 'rgba(106, 109, 205, 0.2)',
               tension: 0.4,
               pointBackgroundColor: '#6A6DCD',
               pointRadius: 4,
-              fill: true, // Remplir la zone sous la courbe
             },
           ],
         },
@@ -173,19 +164,29 @@ export default {
       })
     },
     updateChart() {
-      // Détruire l'ancien graphique s'il existe
       if (this.chart) {
         this.chart.destroy()
       }
-
-      // Recréer le graphique avec les nouvelles données
       this.createChart()
+    },
+    observeResize() {
+      const container = this.$refs.bpChart?.parentElement
+      if (!container) return
+
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.chart) {
+          this.chart.resize()
+        }
+      })
+      this.resizeObserver.observe(container)
     },
   },
   beforeUnmount() {
-    // S'assurer que le graphique est détruit avant de démonter le composant
     if (this.chart) {
       this.chart.destroy()
+    }
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect()
     }
   },
 }
@@ -193,16 +194,22 @@ export default {
 
 <style scoped>
 .chart-section {
-  background-color: #f9f9f9;
+  background-color: #f4f0fe;
   border-radius: 10px;
   padding: 1.5rem;
   margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 }
+
 .header-chart-wrapper {
-  max-width: 60%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
 }
+
 .chart-header {
   display: flex;
   justify-content: space-between;
@@ -210,40 +217,40 @@ export default {
   margin-bottom: 1rem;
 }
 
-.indicators-wrapper {
-  display: flex;
-  gap: 2rem;
-  flex-direction: column;
-}
-
-.dot-label-wrapper {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-}
-
 .chart-header h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-main-color);
 }
 
 .time-filter {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #666;
+  color: var(--text-secondary-color);
   cursor: pointer;
 }
 
 .chart-container {
-  height: 200px;
-  margin-bottom: 1rem;
+  flex-grow: 1;
+  position: relative;
+  width: 100%;
+  height: 250px; /* Ajustable selon besoin */
+}
+
+.canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .bp-indicators {
   display: flex;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 220px;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(0, 0, 0, 0.1); /* Séparateur */
+  align-self: stretch; /* Pour coller à la hauteur du graphique */
 }
 
 .bp-indicator {
@@ -252,11 +259,21 @@ export default {
   gap: 0.5rem;
 }
 
+.bp-indicator:not(:last-child) {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dot-label-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .indicator-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  margin-bottom: 0.25rem;
 }
 
 .indicator-dot.systolic {
@@ -268,12 +285,14 @@ export default {
 }
 
 .bp-value {
-  font-size: 1.5rem;
+  font-size: 22px;
   font-weight: 700;
+  color: var(--text-main-color);
 }
 
 .bp-status {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  color: #555;
   display: flex;
   align-items: center;
 }
@@ -288,11 +307,28 @@ export default {
   margin-right: 0.25rem;
 }
 
-.bp-status.high {
-  color: #e74c3c;
-}
+@media (max-width: 768px) {
+  .chart-section {
+    flex-direction: column;
+    align-items: center;
+  }
 
-.bp-status.low {
-  color: #3498db;
+  .chart-container {
+    height: 200px;
+  }
+
+  .bp-indicators {
+    width: 100%;
+    border-left: none;
+    padding-left: 0;
+    margin-top: 1rem;
+    align-items: center;
+  }
+
+  .bp-indicator {
+    text-align: center;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
 }
 </style>

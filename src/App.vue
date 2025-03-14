@@ -14,7 +14,6 @@
           <PatientsSidebar
             :patients="allPatients"
             :activePatient="selectedPatient ? selectedPatient.name : ''"
-            @select-patient="selectPatient"
           />
           <div class="patient-details-wrapper">
             <DiagnosticHistory :patient="selectedPatient || []" />
@@ -52,7 +51,7 @@ export default {
   },
   setup() {
     const allPatients = ref([])
-    const selectedPatient = ref(null)
+    const selectedPatient = ref(3)
     const isLoading = ref(true)
     const error = ref(null)
 
@@ -67,7 +66,7 @@ export default {
 
         if (allPatients.value.length > 0) {
           // Sélectionner le premier patient par défaut
-          selectedPatient.value = allPatients.value[0]
+          selectedPatient.value = allPatients.value[3]
         } else {
           error.value = 'Aucun patient trouvé'
         }
@@ -79,10 +78,6 @@ export default {
       }
     }
 
-    const selectPatient = (patient) => {
-      selectedPatient.value = patient
-    }
-
     onMounted(fetchData)
 
     return {
@@ -91,7 +86,6 @@ export default {
       isLoading,
       error,
       fetchData,
-      selectPatient,
     }
   },
 }
@@ -109,7 +103,7 @@ body {
 .app-wrapper {
   height: 100vh; /* Assurer que l'application prend toute la hauteur de la fenêtre */
   overflow: scroll; /* Désactiver également le défilement dans l'app-wrapper */
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .content-wrapper {

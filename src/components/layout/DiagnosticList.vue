@@ -47,10 +47,17 @@ export default {
 
 .table-wrapper {
   overflow: scroll;
+  width: 100%;
+}
+
+.diagnostic-list {
+  width: 100%;
 }
 
 .diagnostic-table {
+  width: 100%;
   border-spacing: 0;
+  table-layout: auto;
 }
 
 .diagnostic-table thead tr {
