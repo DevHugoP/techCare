@@ -2,7 +2,6 @@
   <div class="app-wrapper">
     <TechCareHeader />
     <main>
-      {{ fetchData }}
       <div v-if="isLoading" class="loading-state">
         <p>Chargement des données...</p>
       </div>
@@ -65,19 +64,17 @@ export default {
 
       try {
         const data = await fetchPatientData()
-        allPatients.value = data || []
+        // Filtrer les éléments null ou undefined
+        allPatients.value = data.filter((patient) => patient) || []
 
-        // Sélectionner Jessica Taylor par défaut
-        const jessica = data.find((patient) => patient.name === 'Jessica Taylor')
-        if (jessica) {
-          selectedPatient.value = jessica
-        } else if (data.length > 0) {
-          // Sélectionner le premier patient si Jessica n'est pas trouvée
-          selectedPatient.value = data[0]
+        if (allPatients.value.length > 0) {
+          // Sélectionner le premier patient par défaut
+          selectedPatient.value = allPatients.value[0]
         } else {
           error.value = 'Aucun patient trouvé'
         }
       } catch (err) {
+        console.error('Erreur dans fetchData:', err)
         error.value = err.message || 'Une erreur est survenue lors du chargement des données'
       } finally {
         isLoading.value = false
