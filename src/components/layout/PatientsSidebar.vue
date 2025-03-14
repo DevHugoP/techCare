@@ -1,11 +1,9 @@
 <!-- src/components/layout/PatientsSidebarUpdated.vue -->
 <template>
   <div class="patients-sidebar">
-    <h2 class="section-title">Patients</h2>
-
     <div class="search-container">
-      <img src="@/assets/icons/search.svg" alt="Search" class="search-icon" />
-      <input type="text" placeholder="Search..." v-model="searchQuery" />
+      <h2 class="section-title">Patients</h2>
+      <img src="/src/assets/icons/search.svg" alt="search icon" />
     </div>
 
     <div class="patients-list">
@@ -14,7 +12,6 @@
         :key="patient.id || patient.name"
         class="patient-item"
         :class="{ active: patient.name === activePatient }"
-        @click="selectPatient(patient)"
       >
         <div class="patient-avatar">
           <img
@@ -49,7 +46,7 @@ export default {
       default: '',
     },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const searchQuery = ref('')
 
     const filteredPatients = computed(() => {
@@ -60,14 +57,9 @@ export default {
       )
     })
 
-    const selectPatient = (patient) => {
-      emit('select-patient', patient)
-    }
-
     return {
       searchQuery,
       filteredPatients,
-      selectPatient,
     }
   },
 }
@@ -89,8 +81,9 @@ export default {
 }
 
 .search-container {
-  position: relative;
-  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .search-icon {
