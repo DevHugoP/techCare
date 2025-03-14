@@ -1,22 +1,34 @@
-<!-- src/components/layout/PatientsSidebar.vue -->
+<!-- src/components/layout/PatientsSidebarUpdated.vue -->
 <template>
   <div class="patients-sidebar">
-    <h3 class="section-title">Patients</h3>
+    <h2 class="section-title">Patients</h2>
 
-    <div class="search-bar">
-      <input type="text" placeholder="Rechercher un patient..." v-model="searchQuery" />
+    <div class="search-container">
+      <img src="@/assets/icons/search.svg" alt="Search" class="search-icon" />
+      <input type="text" placeholder="Search..." v-model="searchQuery" />
     </div>
 
     <div class="patients-list">
       <div
-        v-for="patient in patients"
-        :key="patient.id"
+        v-for="patient in filteredPatients"
+        :key="patient.id || patient.name"
         class="patient-item"
         :class="{ active: patient.name === activePatient }"
         @click="selectPatient(patient)"
       >
-        <div class="patient-name">{{ patient.name }}</div>
-        <div class="patient-info">{{ patient.age }} ans, {{ patient.gender }}</div>
+        <div class="patient-avatar">
+          <img
+            :src="`/src/assets/patients/${patient.name.split(' ')[0].toLowerCase()}.png`"
+            :alt="patient.name"
+          />
+        </div>
+        <div class="patient-info">
+          <div class="patient-name">{{ patient.name }}</div>
+          <div class="patient-details">{{ patient.gender }}, {{ patient.age }}</div>
+        </div>
+        <button class="more-button">
+          <img src="@/assets/icons/more-horizontal.svg" alt="More options" />
+        </button>
       </div>
     </div>
   </div>
@@ -66,22 +78,35 @@ export default {
   background-color: var(--bg-secondary-color);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  height: 100%;
+  overflow-y: auto;
 }
 
 .section-title {
+  font-size: 1.25rem;
   margin-bottom: 1.5rem;
-  font-size: 1.2rem;
+  font-weight: 600;
 }
 
-.search-bar {
-  margin-bottom: 1rem;
+.search-container {
+  position: relative;
+  margin-bottom: 1.5rem;
 }
 
-.search-bar input {
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+}
+
+.search-container input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--bg-main-color);
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: none;
+  background-color: var(--bg-main-color);
   border-radius: 0.5rem;
   font-size: 0.9rem;
 }
@@ -89,14 +114,16 @@ export default {
 .patients-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .patient-item {
+  display: flex;
+  align-items: center;
   padding: 0.75rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  position: relative;
 }
 
 .patient-item:hover {
@@ -107,13 +134,42 @@ export default {
   background-color: var(--button-main-color);
 }
 
+.patient-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 0.75rem;
+}
+
+.patient-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.patient-info {
+  flex: 1;
+}
+
 .patient-name {
   font-weight: 500;
   margin-bottom: 0.25rem;
 }
 
-.patient-info {
+.patient-details {
   font-size: 0.8rem;
   color: var(--text-secondary-color);
+}
+
+.more-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.more-button img {
+  width: 16px;
+  height: 16px;
 }
 </style>

@@ -1,27 +1,33 @@
-<!-- src/components/layout/DiagnosticHistory.vue -->
 <template>
-  <div class="diagnostic-history">
-    <h3 class="section-title">Historique des diagnostics</h3>
+  <div class="diagnostic-list card">
+    <h3 class="section-title">Diagnostic List</h3>
 
-    <div v-if="diagnostics && diagnostics.length" class="diagnostics-list">
-      <div v-for="(diag, index) in diagnostics" :key="index" class="diagnostic-card">
-        <div class="diagnostic-header">
-          <h4>{{ diag.name }}</h4>
-          <span class="diagnostic-date">{{ formatDate(diag.date) }}</span>
-        </div>
-        <p class="diagnostic-description">{{ diag.description }}</p>
-        <div class="diagnostic-footer">
-          <span class="diagnostic-doctor">Dr. {{ diag.doctor }}</span>
-        </div>
-      </div>
-    </div>
-    <p v-else class="no-data">Aucun diagnostic enregistré</p>
+    <table class="diagnostic-table">
+      <thead>
+        <tr>
+          <th>Problem/Diagnosis</th>
+          <th>Description</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(diag, index) in diagnostics" :key="index">
+          <td>{{ diag.name }}</td>
+          <td>{{ diag.description }}</td>
+          <td>
+            <span class="status-badge" :class="getStatusClass(diag.status)">
+              {{ diag.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script lang="ts">
 export default {
-  name: 'DiagnosticHistory',
+  name: 'DiagnosticTable',
   props: {
     diagnostics: {
       type: Array,
@@ -29,74 +35,56 @@ export default {
     },
   },
   methods: {
-    formatDate(dateString) {
-      if (!dateString) return 'Date inconnue'
+    getStatusClass(status) {
+      if (!status) return ''
 
-      const date = new Date(dateString)
-      return new Intl.DateTimeFormat('fr-FR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      }).format(date)
+      status = status.toLowerCase()
+      if (status.includes('active') || status.includes('treated')) {
+        return 'status-active'
+      } else if (status.includes('observation')) {
+        return 'status-observation'
+      } else if (status.includes('cured')) {
+        return 'status-cured'
+      } else if (status.includes('inactive')) {
+        return 'status-inactive'
+      } else {
+        return 'status-untreated'
+      }
     },
   },
 }
 </script>
 
 <style scoped>
-.diagnostic-history {
-  background-color: var(--bg-secondary-color);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.diagnostic-list {
+  margin-bottom: 2rem;
 }
 
-.section-title {
-  margin-bottom: 1.5rem;
-  font-size: 1.2rem;
+.diagnostic-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.diagnostics-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.diagnostic-card {
-  border: 1px solid var(--bg-main-color);
-  border-radius: 0.75rem;
+.diagnostic-table th,
+.diagnostic-table td {
   padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--bg-main-color);
 }
 
-.diagnostic-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.diagnostic-header h4 {
-  font-size: 1rem;
-}
-
-.diagnostic-date {
-  font-size: 0.8rem;
+.diagnostic-table th {
+  font-weight: 500;
   color: var(--text-secondary-color);
-}
-
-.diagnostic-description {
-  margin-bottom: 1rem;
   font-size: 0.9rem;
 }
 
-.diagnostic-footer {
-  font-size: 0.85rem;
-  color: var(--text-secondary-color);
-  text-align: right;
+.diagnostic-table td {
+  font-size: 0.95rem;
 }
 
-.no-data {
-  color: var(--text-secondary-color);
-  font-style: italic;
+.status-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
 }
 </style>

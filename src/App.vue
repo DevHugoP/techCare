@@ -16,17 +16,14 @@
             :activePatient="selectedPatient ? selectedPatient.name : ''"
             @select-patient="selectPatient"
           />
-
-          <div v-if="selectedPatient" class="patient-details-wrapper">
-            <PatientInfoSidebar :patient="selectedPatient" />
-
-            <div class="medical-data">
-              <LabResult :labResults="selectedPatient.labResults || []" />
-              <DiagnosticHistory :diagnostics="selectedPatient.diagnostics || []" />
-            </div>
+          <div class="patient-details-wrapper">
+            <DiagnosticList :diagnostics="selectedPatient.diagnostics || []" />
+            <DiagnosticList :diagnostics="selectedPatient.diagnostics || []" />
           </div>
-          <div v-else class="no-selection">
-            <p>Sélectionnez un patient pour voir ses détails</p>
+
+          <div class="medical-data">
+            <PatientInfoSidebar :patient="selectedPatient" />
+            <LabResult :labResults="selectedPatient.labResults || []" />
           </div>
         </div>
       </div>
@@ -41,6 +38,7 @@ import PatientInfoSidebar from './components/layout/PatientInfoSidebar.vue'
 import PatientsSidebar from './components/layout/PatientsSidebar.vue'
 import LabResult from './components/layout/LabResult.vue'
 import DiagnosticHistory from './components/layout/DiagnosticHistory.vue'
+import DiagnosticList from './components/layout/DiagnosticList.vue'
 import { fetchPatientData } from './request.js'
 
 export default {
@@ -51,6 +49,7 @@ export default {
     PatientsSidebar,
     LabResult,
     DiagnosticHistory,
+    DiagnosticList,
   },
   setup() {
     const allPatients = ref([])
@@ -100,16 +99,23 @@ export default {
 </script>
 
 <style scoped>
-.app-wrapper {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--bg-main-color);
+/* Empêcher le défilement horizontal et vertical */
+html,
+body {
+  margin: 0; /* Éviter les marges par défaut qui pourraient provoquer un défilement */
+  padding: 0; /* Enlever tout padding par défaut */
+  height: 100%; /* Assurer que la hauteur est toujours à 100% pour les éléments */
+  width: 100%; /* Assurer que la largeur est toujours à 100% pour les éléments */
 }
 
-main {
-  flex-grow: 1;
+.app-wrapper {
+  height: 100vh; /* Assurer que l'application prend toute la hauteur de la fenêtre */
+  overflow: scroll; /* Désactiver également le défilement dans l'app-wrapper */
   padding: 2rem;
+}
+
+.content-wrapper {
+  overflow: auto; /* Autoriser le défilement uniquement si nécessaire dans la zone de contenu */
 }
 
 .loading-state,
@@ -140,14 +146,15 @@ main {
 }
 
 .content-grid {
-  display: grid;
-  grid-template-columns: 300px 1fr;
+  display: flex;
   gap: 2rem;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .patient-details-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
 }
 
@@ -157,7 +164,7 @@ main {
   gap: 2rem;
 }
 
-@media (max-width: 1400px) {
+/* @media (max-width: 1400px) {
   .patient-details-wrapper {
     grid-template-columns: 1fr;
   }
@@ -167,5 +174,5 @@ main {
   .content-grid {
     grid-template-columns: 1fr;
   }
-}
+} */
 </style>
