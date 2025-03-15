@@ -33,18 +33,11 @@ export default {
 <style scoped>
 .lab-results {
   background-color: var(--bg-secondary-color);
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-.section-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary-color);
-  margin-bottom: 1.5rem;
 }
 
 .lab-results-list {
@@ -70,7 +63,7 @@ export default {
 .lab-name {
   font-weight: 400;
   font-size: 14px;
-  color: var(--text-main-color);
+  color: var(--text-primary-color);
 }
 
 .download-button {

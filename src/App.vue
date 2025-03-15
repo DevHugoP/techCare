@@ -10,19 +10,19 @@
         <button @click="fetchData">Try again</button>
       </div>
       <div v-else class="dashboard-layout">
-        <!-- Sidebar avec liste des patients -->
+        <!-- Sidebar with patients list -->
         <PatientsSidebar
           :patients="allPatients"
           :activePatient="selectedPatient ? selectedPatient.name : ''"
         />
 
-        <!-- Section centrale avec historique et diagnostics -->
+        <!-- Center content with history and diagnostics -->
         <div class="center-content">
           <DiagnosticHistory :patient="selectedPatient || {}" />
           <DiagnosticList :diagnostics="selectedPatient.diagnostics || []" />
         </div>
 
-        <!-- Section droite avec info patient et résultats de laboratoire -->
+        <!-- Right content with patient info and lab results -->
         <div class="right-content">
           <PatientInfoSidebar :patient="selectedPatient" />
           <LabResult :labResults="selectedPatient.labResults || []" />
@@ -104,7 +104,7 @@ export default {
 
 .main-content {
   flex: 1;
-  padding: 0rem 0.8rem;
+  padding: 0 var(--spacing-sm);
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -112,11 +112,11 @@ export default {
 
 .dashboard-layout {
   display: flex;
-  gap: 1rem;
+  gap: var(--spacing-md);
   height: 100%;
   min-height: min-content;
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-lg);
   overflow: visible;
   max-height: calc(100vh - 100px);
 }
@@ -125,7 +125,7 @@ export default {
   flex: 1.5;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--spacing-lg);
   min-width: 0;
   height: 100%;
   max-height: 100%;
@@ -135,7 +135,7 @@ export default {
   flex: 0.6;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--spacing-lg);
   min-width: 0;
   height: 100%;
   max-height: 100%;
@@ -149,8 +149,8 @@ export default {
   justify-content: center;
   min-height: 200px;
   background-color: var(--bg-secondary-color);
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
   text-align: center;
   margin: auto;
   width: 80%;
@@ -162,7 +162,7 @@ export default {
   padding: 0.4rem 0.8rem;
   background-color: var(--button-main-color);
   border: none;
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
 }
 
@@ -170,12 +170,6 @@ export default {
   .dashboard-layout {
     flex-direction: column;
     max-height: none;
-  }
-
-  .center-content,
-  .right-content {
-    width: 100%;
-    flex: none;
   }
 }
 </style>

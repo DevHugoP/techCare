@@ -1,41 +1,31 @@
-// request.js
 import APIClient from './api-client'
 
-// Création d'une instance de client API
 const apiClient = new APIClient('https://fedskillstest.coalitiontechnologies.workers.dev')
-
-// Configuration de l'authentification
 apiClient.setBasicAuth('coalition', 'skills-test')
 
 export async function fetchPatientData() {
   try {
-    // Récupération des données des patients
     const data = await apiClient.get()
-    console.log('Données reçues:', data)
 
-    // Vérifier le format des données
     if (!data || typeof data !== 'object') {
-      console.error('Format de données inattendu:', data)
-      throw new Error('Format de données inattendu: les données ne sont pas un objet')
+      throw new Error('Unexpected data format: data is not an object')
     }
 
-    // Vérifier si les données sont un tableau ou un objet
     const patientsArray = Array.isArray(data) ? data : [data]
-
-    // Retourner les données formatées pour tous les patients
-    return patientsArray.map((patient) => formatPatientData(patient))
+    return patientsArray.map((patient) => formatPatientData(patient)).filter(Boolean)
   } catch (error) {
-    console.error("Erreur lors de l'appel API:", error)
+    console.error('API call error:', error)
     throw error
   }
 }
 
-// Fonction pour formater les données du patient selon la structure attendue par l'application
 function formatPatientData(patientData) {
   if (!patientData || !patientData.name) {
-    console.error('Données de patient invalides:', patientData)
     return null
   }
+
+  const diagnosisHistory = patientData.diagnosis_history || []
+  const latestDiagnosis = diagnosisHistory.length > 0 ? diagnosisHistory[0] : null
 
   return {
     name: patientData.name,
@@ -46,69 +36,44 @@ function formatPatientData(patientData) {
     emergencyContact: patientData.emergency_contact,
     insurance: patientData.insurance_type,
 
-    // Données du dernier diagnostic (Mars 2024)
-    bloodPressure:
-      patientData.diagnosis_history && patientData.diagnosis_history.length > 0
-        ? {
-            current: {
-              systolic: patientData.diagnosis_history[0].blood_pressure.systolic.value,
-              diastolic: patientData.diagnosis_history[0].blood_pressure.diastolic.value,
-            },
-            history: processBloodPressureHistory(patientData.diagnosis_history),
-          }
-        : null,
+    bloodPressure: latestDiagnosis
+      ? {
+          current: {
+            systolic: latestDiagnosis.blood_pressure.systolic.value,
+            diastolic: latestDiagnosis.blood_pressure.diastolic.value,
+          },
+          history: processBloodPressureHistory(diagnosisHistory),
+        }
+      : null,
 
-    // Signes vitaux actuels
-    respiratoryRate:
-      patientData.diagnosis_history && patientData.diagnosis_history.length > 0
-        ? patientData.diagnosis_history[0].respiratory_rate.value
-        : null,
-    temperature:
-      patientData.diagnosis_history && patientData.diagnosis_history.length > 0
-        ? patientData.diagnosis_history[0].temperature.value
-        : null,
-    heartRate:
-      patientData.diagnosis_history && patientData.diagnosis_history.length > 0
-        ? patientData.diagnosis_history[0].heart_rate.value
-        : null,
+    respiratoryRate: latestDiagnosis ? latestDiagnosis.respiratory_rate.value : null,
+    temperature: latestDiagnosis ? latestDiagnosis.temperature.value : null,
+    heartRate: latestDiagnosis ? latestDiagnosis.heart_rate.value : null,
 
-    // Liste des diagnostics
-    diagnostics: patientData.diagnostic_list
-      ? patientData.diagnostic_list.map((diag) => ({
-          name: diag.name,
-          description: diag.description,
-          status: diag.status,
-        }))
-      : [],
+    diagnostics: (patientData.diagnostic_list || []).map((diag) => ({
+      name: diag.name,
+      description: diag.description,
+      status: diag.status,
+    })),
 
-    // Résultats de laboratoire
-    labResults: patientData.lab_results
-      ? patientData.lab_results.map((lab) => ({
-          name: lab,
-          downloadable: true,
-        }))
-      : [],
+    labResults: (patientData.lab_results || []).map((lab) => ({
+      name: lab,
+      downloadable: true,
+    })),
   }
 }
 
-// Fonction pour traiter l'historique de pression artérielle pour le graphique
 function processBloodPressureHistory(diagnosisHistory) {
-  if (!diagnosisHistory || !Array.isArray(diagnosisHistory) || diagnosisHistory.length === 0) {
+  if (!Array.isArray(diagnosisHistory) || diagnosisHistory.length === 0) {
     return []
   }
 
-  // Nous prenons les 6 derniers mois
   return diagnosisHistory
     .slice(0, 6)
-    .map((diagnosis) => {
-      // Format: "Month Year" => "Month. Year"
-      const monthYear = `${diagnosis.month}. ${diagnosis.year}`
-
-      return {
-        month: monthYear,
-        systolic: diagnosis.blood_pressure.systolic.value,
-        diastolic: diagnosis.blood_pressure.diastolic.value,
-      }
-    })
-    .reverse() // Pour les avoir dans l'ordre chronologique
+    .map((diagnosis) => ({
+      month: `${diagnosis.month}. ${diagnosis.year}`,
+      systolic: diagnosis.blood_pressure.systolic.value,
+      diastolic: diagnosis.blood_pressure.diastolic.value,
+    }))
+    .reverse()
 }

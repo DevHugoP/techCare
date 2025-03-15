@@ -233,8 +233,8 @@ export default {
 <style scoped>
 .chart-section {
   background-color: #f4f0fe;
-  border-radius: 10px;
-  padding: 1.5rem;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -244,26 +244,26 @@ export default {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  margin-right: 1rem;
+  margin-right: var(--spacing-md);
 }
 
 .chart-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .chart-header h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-main-color);
+  color: var(--text-primary-color);
 }
 
 .time-filter {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
   color: var(--text-secondary-color);
   cursor: pointer;
 }
@@ -291,18 +291,18 @@ export default {
 .bp-indicator {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .bp-indicator:not(:last-child) {
-  padding-bottom: 1rem;
+  padding-bottom: var(--spacing-md);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .dot-label-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .indicator-dot {
@@ -312,17 +312,17 @@ export default {
 }
 
 .indicator-dot.systolic {
-  background-color: #d174e3;
+  background-color: var(--systolic-color);
 }
 
 .indicator-dot.diastolic {
-  background-color: #6a6dcd;
+  background-color: var(--diastolic-color);
 }
 
 .bp-value {
   font-size: 22px;
   font-weight: 700;
-  color: var(--text-main-color);
+  color: var(--text-primary-color);
 }
 
 .bp-status {
@@ -330,7 +330,7 @@ export default {
   color: var(--text-secondary-color);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 @media (max-width: 768px) {
@@ -347,7 +347,7 @@ export default {
     width: 100%;
     border-left: none;
     padding-left: 0;
-    margin-top: 1rem;
+    margin-top: var(--spacing-md);
     align-items: center;
   }
 

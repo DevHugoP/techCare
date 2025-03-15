@@ -90,44 +90,8 @@ export default {
         date = new Date(dateString)
       }
 
-      // Format: Month DD, YYYY
       const options = { month: 'long', day: 'numeric', year: 'numeric' }
       return date.toLocaleDateString('en-US', options)
-    },
-    getLatestDiagnosis(metric: string) {
-      if (!this.patient.diagnosis_history || this.patient.diagnosis_history.length === 0) {
-        return 'N/A'
-      }
-
-      const latest = this.patient.diagnosis_history[0]
-
-      if (metric === 'systolic') {
-        return latest.blood_pressure.systolic.value
-      } else if (metric === 'diastolic') {
-        return latest.blood_pressure.diastolic.value
-      } else if (metric === 'heart_rate') {
-        return latest.heart_rate.value
-      } else if (metric === 'respiratory_rate') {
-        return latest.respiratory_rate.value
-      } else if (metric === 'temperature') {
-        return latest.temperature.value
-      }
-
-      return 'N/A'
-    },
-    getStatusClass(status: string) {
-      status = status.toLowerCase()
-      if (status.includes('active') || status.includes('treated')) {
-        return 'status-active'
-      } else if (status.includes('observation')) {
-        return 'status-observation'
-      } else if (status.includes('cured')) {
-        return 'status-cured'
-      } else if (status.includes('inactive')) {
-        return 'status-inactive'
-      } else {
-        return 'status-untreated'
-      }
     },
   },
 }
@@ -138,14 +102,14 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-secondary-color);
-  border-radius: 1rem;
-  padding: 1rem;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
   height: 68%;
 }
 
 .profile-section {
   text-align: center;
-  padding: 1rem;
+  padding: var(--spacing-md);
 }
 
 .patient-avatar {
@@ -153,7 +117,7 @@ export default {
   height: 150px;
   border-radius: 50%;
   overflow: hidden;
-  margin: 0 auto 1rem;
+  margin: 0 auto var(--spacing-md);
 }
 
 .patient-avatar img {
@@ -164,12 +128,12 @@ export default {
 
 .patient-name {
   font-size: 24px;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-lg);
 }
 
 .patient-info-list {
   text-align: left;
-  margin-bottom: 2rem;
+  margin-bottom: var(--spacing-lg);
 }
 
 .info-item {
@@ -181,7 +145,7 @@ export default {
 .icon-container {
   width: 35px;
   height: 35px;
-  margin-right: 1rem;
+  margin-right: var(--spacing-md);
 }
 
 .info-content {
@@ -203,7 +167,7 @@ export default {
 .info-button {
   background-color: var(--button-main-color);
   border: none;
-  border-radius: 2rem;
+  border-radius: var(--border-radius-lg);
   padding: 0.6rem 2.2rem;
   cursor: pointer;
   font-weight: 500;

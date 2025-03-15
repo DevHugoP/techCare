@@ -35,11 +35,11 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 0.6rem 1rem;
-  border-radius: 2rem;
+  border-radius: var(--border-radius-lg);
   border: none;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
   background-color: transparent;
-  color: var(--text-main-color);
+  color: var(--text-primary-color);
 }
 
 .base-button img {

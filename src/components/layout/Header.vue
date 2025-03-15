@@ -4,10 +4,15 @@
 
     <nav class="main-nav">
       <BaseButton icon="home.svg" altText="Overview" label="Overview" :active="false" />
-      <BaseButton icon="group.svg" altText="Overview" label="Patients" :active="true" />
-      <BaseButton icon="calendar.svg" altText="Overview" label="Schedule" :active="false" />
-      <BaseButton icon="chat_bubble.svg" altText="Overview" label="Message" :active="false" />
-      <BaseButton icon="credit_card.svg" altText="Overview" label="Transactions" :active="false" />
+      <BaseButton icon="group.svg" altText="Patients" label="Patients" :active="true" />
+      <BaseButton icon="calendar.svg" altText="Schedule" label="Schedule" :active="false" />
+      <BaseButton icon="chat_bubble.svg" altText="Messages" label="Message" :active="false" />
+      <BaseButton
+        icon="credit_card.svg"
+        altText="Transactions"
+        label="Transactions"
+        :active="false"
+      />
     </nav>
 
     <div class="user-profile">
@@ -19,8 +24,8 @@
         </div>
       </div>
       <div class="separator"></div>
-      <img src="@/assets/icons/settings.svg" />
-      <img src="@/assets/icons/more-vertical.svg" />
+      <img src="@/assets/icons/settings.svg" alt="Settings" />
+      <img src="@/assets/icons/more-vertical.svg" alt="More" />
     </div>
   </header>
 </template>
@@ -38,11 +43,11 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem;
-  border-radius: 2rem;
-  margin: 1rem 0.7rem;
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  margin: var(--spacing-md) 0.7rem;
   height: 60px;
-  background-color: #fff;
+  background-color: var(--bg-secondary-color);
 }
 
 .main-nav {
@@ -59,13 +64,13 @@ header {
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
 }
 
 .user-info img {

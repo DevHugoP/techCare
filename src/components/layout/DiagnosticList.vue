@@ -1,4 +1,3 @@
--
 <template>
   <div class="diagnostic-list card">
     <h3 class="section-title">Diagnostic List</h3>
@@ -28,25 +27,18 @@ export default {
       default: () => [],
     },
   },
-  methods: {},
 }
 </script>
 
 <style scoped>
-.section-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text-primary-color);
-}
-
 .diagnostic-list {
   width: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background-color: var(--bg-secondary-color);
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
 }
 
 .table-header {
@@ -62,26 +54,6 @@ export default {
   overflow-x: hidden;
   height: 100%;
   max-height: calc(100% - 50px);
-}
-
-.table-body::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.table-body::-webkit-scrollbar-track {
-  background: #f0f0f0;
-  border-radius: 8px;
-}
-
-.table-body::-webkit-scrollbar-thumb {
-  background-color: #c0c0c0;
-  border-radius: 8px;
-  border: 2px solid #f0f0f0;
-}
-
-.table-body::-webkit-scrollbar-thumb:hover {
-  background-color: #a0a0a0;
 }
 
 .table-row {
@@ -108,7 +80,7 @@ export default {
 .table-cell {
   font-size: 14px;
   font-weight: 400;
-  color: var(--text-main-color);
+  color: var(--text-primary-color);
   padding: 16px 16px;
 }
 

@@ -68,26 +68,19 @@ export default {
 
 <style scoped>
 .patients-sidebar {
-  background-color: white;
-  border-radius: 1rem;
+  background-color: var(--bg-secondary-color);
+  border-radius: var(--border-radius-md);
   width: 280px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  height: 66rem;
+  height: 65rem;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1200px) {
   .patients-sidebar {
     display: none;
   }
-}
-
-.section-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
-  color: #333;
 }
 
 .search-container {
@@ -149,12 +142,12 @@ export default {
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 4px;
-  color: #333;
+  color: var(--text-primary-color);
 }
 
 .patient-details {
   font-size: 12px;
-  color: #666;
+  color: var(--text-secondary-color);
 }
 
 .more-button {

@@ -56,22 +56,16 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-secondary-color);
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
   overflow: visible;
-}
-
-.section-title {
-  margin-bottom: 1.5rem;
-  font-size: 1.25rem;
-  font-weight: 600;
 }
 
 .vital-wrapper {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
 }
 
 .vital-card {
@@ -84,15 +78,15 @@ export default {
 }
 
 .respiratory {
-  background-color: #e0f3fa;
+  background-color: var(--respiratory-bg);
 }
 
 .temperature {
-  background-color: #ffe6e9;
+  background-color: var(--temperature-bg);
 }
 
 .heart-rate {
-  background-color: #ffe6f1;
+  background-color: var(--heart-rate-bg);
 }
 
 .icon-container {
@@ -125,13 +119,8 @@ export default {
   font-size: 14px;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.arrow {
-  margin-right: 5px;
-  font-size: 0.7rem;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
 }
 
 @media (max-width: 768px) {
@@ -140,7 +129,7 @@ export default {
   }
 
   .vital-card {
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
   }
 }
 </style>

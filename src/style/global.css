@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
 
 :root {
-  --text-main-color: #072635;
+  /* Colors */
+  --text-primary-color: #072635;
   --text-secondary-color: #707070;
 
   --bg-main-color: #f6f7f8;
@@ -9,6 +10,30 @@
 
   --button-main-color: #01f0d0;
   --button-secondary-color: #f6f7f8;
+
+  /* Chart and indicator colors */
+  --systolic-color: #e66fd2;
+  --diastolic-color: #7e6cab;
+  --heart-rate-bg: #ffe6f1;
+  --temperature-bg: #ffe6e9;
+  --respiratory-bg: #e0f3fa;
+
+  /* Spacing */
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Border radius */
+  --border-radius-sm: 0.5rem;
+  --border-radius-md: 1rem;
+  --border-radius-lg: 2rem;
+
+  /* Font sizes */
+  --font-size-sm: 0.85rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
 }
 
 * {
@@ -38,8 +63,8 @@ button {
 
 .card {
   background-color: var(--bg-secondary-color);
-  border-radius: 1rem;
-  padding: 1.5rem;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
 }
 
 .action-button {
@@ -51,7 +76,7 @@ button {
 .primary-button {
   background-color: var(--button-main-color);
   border: none;
-  border-radius: 2rem;
+  border-radius: var(--border-radius-lg);
   padding: 0.75rem 2rem;
   font-weight: 500;
 }
@@ -59,53 +84,53 @@ button {
 .secondary-button {
   background-color: var(--button-secondary-color);
   border: none;
-  border-radius: 2rem;
+  border-radius: var(--border-radius-lg);
   padding: 0.75rem 2rem;
   font-weight: 500;
 }
 
 .section-title {
-  font-size: 1.25rem;
-  margin-bottom: 1.5rem;
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-lg);
   font-weight: 600;
 }
 
 .info-label {
-  font-size: 0.85rem;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary-color);
 }
 
 .status-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
-  font-size: 0.85rem;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
   font-weight: 500;
 }
 
 .status-active {
   background-color: rgba(46, 125, 50, 0.1);
-  color: var(--status-active);
+  color: #2e7d32;
 }
 
 .status-observation {
   background-color: rgba(245, 124, 0, 0.1);
-  color: var(--status-observation);
+  color: #f57c00;
 }
 
 .status-untreated {
   background-color: rgba(198, 40, 40, 0.1);
-  color: var(--status-untreated);
+  color: #c62828;
 }
 
 .status-cured {
   background-color: rgba(46, 125, 50, 0.1);
-  color: var(--status-cured);
+  color: #2e7d32;
 }
 
 .status-inactive {
   background-color: rgba(97, 97, 97, 0.1);
-  color: var(--status-inactive);
+  color: #616161;
 }
 
 @media (max-width: 1200px) {
@@ -118,6 +143,7 @@ button {
   }
 }
 
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
