@@ -93,7 +93,6 @@ export default {
 </script>
 
 <style scoped>
-/* Layout principal de l'application - hauteur réduite */
 .app-container {
   height: 100vh;
   width: 100%;
@@ -103,7 +102,6 @@ export default {
   overflow: hidden;
 }
 
-/* Container principal sous le header - padding réduit */
 .main-content {
   flex: 1;
   padding: 0rem 0.8rem;
@@ -112,7 +110,6 @@ export default {
   flex-direction: column;
 }
 
-/* Layout du dashboard en grille - gap réduit */
 .dashboard-layout {
   display: flex;
   gap: 1rem;
@@ -121,10 +118,9 @@ export default {
   width: 100%;
   margin-bottom: 2rem;
   overflow: visible;
-  max-height: calc(100vh - 100px); /* Hauteur maximale réduite */
+  max-height: calc(100vh - 100px);
 }
 
-/* Section centrale avec diagnostic et historique - gap réduit */
 .center-content {
   flex: 1.5;
   display: flex;
@@ -135,7 +131,6 @@ export default {
   max-height: 100%;
 }
 
-/* Section droite avec info patient et résultats - gap réduit */
 .right-content {
   flex: 0.6;
   display: flex;
@@ -146,17 +141,16 @@ export default {
   max-height: 100%;
 }
 
-/* Styles pour les états de chargement et d'erreur */
 .loading-container,
 .error-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 200px; /* Réduit */
+  min-height: 200px;
   background-color: var(--bg-secondary-color);
   border-radius: 1rem;
-  padding: 1.5rem; /* Réduit */
+  padding: 1.5rem;
   text-align: center;
   margin: auto;
   width: 80%;
@@ -164,15 +158,14 @@ export default {
 }
 
 .error-container button {
-  margin-top: 0.7rem; /* Réduit */
-  padding: 0.4rem 0.8rem; /* Réduit */
+  margin-top: 0.7rem;
+  padding: 0.4rem 0.8rem;
   background-color: var(--button-main-color);
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
 }
 
-/* Responsive design */
 @media (max-width: 1200px) {
   .dashboard-layout {
     flex-direction: column;

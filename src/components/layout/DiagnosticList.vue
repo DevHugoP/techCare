@@ -3,14 +3,12 @@
   <div class="diagnostic-list card">
     <h3 class="section-title">Diagnostic List</h3>
 
-    <!-- Table header -->
     <div class="table-header">
       <div class="header-cell diagnosis-cell">Problem/Diagnosis</div>
       <div class="header-cell description-cell">Description</div>
       <div class="header-cell status-cell">Status</div>
     </div>
 
-    <!-- Table body with scroll -->
     <div class="table-body">
       <div v-for="(diag, index) in diagnostics" :key="index" class="table-row">
         <div class="table-cell diagnosis-cell">{{ diag.name }}</div>
@@ -63,10 +61,9 @@ export default {
   overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
-  max-height: calc(100% - 50px); /* Hauteur moins l'en-tête */
+  max-height: calc(100% - 50px);
 }
 
-/* Styles de scrollbar personnalisés pour WebKit (Chrome, Safari, Edge) */
 .table-body::-webkit-scrollbar {
   width: 8px;
   height: 8px;

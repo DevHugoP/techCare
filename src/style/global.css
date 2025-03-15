@@ -1,8 +1,6 @@
-/* src/style/global.css */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Color palette */
   --text-main-color: #072635;
   --text-secondary-color: #707070;
 
@@ -38,7 +36,6 @@ button {
   cursor: pointer;
 }
 
-/* Reusable Components */
 .card {
   background-color: var(--bg-secondary-color);
   border-radius: 1rem;
@@ -78,7 +75,6 @@ button {
   color: var(--text-secondary-color);
 }
 
-/* Status Badges */
 .status-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
@@ -112,7 +108,6 @@ button {
   color: var(--status-inactive);
 }
 
-/* Responsive breakpoints */
 @media (max-width: 1200px) {
   .content-wrapper {
     flex-direction: column;
@@ -122,9 +117,7 @@ button {
     width: 100%;
   }
 }
-/* Ajoutez ce code dans src/style/global.css */
 
-/* Style personnalisé pour les barres de défilement */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -144,13 +137,11 @@ button {
   background: #c0c0c0;
 }
 
-/* Pour Firefox */
 * {
   scrollbar-width: thin;
   scrollbar-color: #e0e0e0 transparent;
 }
 
-/* Style spécifique pour les composants */
 .patients-sidebar::-webkit-scrollbar,
 .diagnostic-list::-webkit-scrollbar,
 .patient-view::-webkit-scrollbar,
@@ -162,7 +153,6 @@ button {
   height: 4px;
 }
 
-/* Cacher les barres de défilement quand elles ne sont pas utilisées */
 .patients-sidebar,
 .diagnostic-list,
 .patient-view,
@@ -171,8 +161,6 @@ button {
   scrollbar-gutter: stable;
 }
 
-/* Pour les navigateurs qui ne supportent pas toutes ces propriétés,
-   on peut ajouter un fallback propre */
 @supports not (scrollbar-width: thin) {
   .patients-sidebar,
   .diagnostic-list,

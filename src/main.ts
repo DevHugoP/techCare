@@ -1,4 +1,3 @@
-// Import style sheets
 import './style/global.css'
 
 import { createApp } from 'vue'

@@ -272,7 +272,7 @@ export default {
   flex-grow: 1;
   position: relative;
   width: 100%;
-  height: 250px; /* Ajustable selon besoin */
+  height: 250px;
 }
 
 .canvas {

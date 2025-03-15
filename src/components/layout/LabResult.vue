@@ -64,7 +64,7 @@ export default {
 }
 
 .lab-result-item.selected {
-  background-color: #f5f6fa; /* Couleur grise pour la ligne sélectionnée */
+  background-color: #f5f6fa;
 }
 
 .lab-name {

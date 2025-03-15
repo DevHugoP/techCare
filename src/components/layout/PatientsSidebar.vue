@@ -1,4 +1,3 @@
-<!-- src/components/layout/PatientsSidebar.vue -->
 <template>
   <div class="patients-sidebar">
     <div class="search-container">
