@@ -44,11 +44,25 @@
 <script lang="ts">
 import Chart from 'chart.js/auto'
 
+interface BloodPressureHistory {
+  month: string
+  systolic: number
+  diastolic: number
+}
+
+interface BloodPressureData {
+  current: {
+    systolic: number
+    diastolic: number
+  }
+  history: BloodPressureHistory[]
+}
+
 export default {
   name: 'BloodPressureChart',
   props: {
     chartData: {
-      type: Object,
+      type: Object as () => BloodPressureData,
       required: true,
     },
   },
@@ -84,31 +98,33 @@ export default {
 
       if (!this.chartData || !this.chartData.history || this.chartData.history.length === 0) return
 
-      const sortedHistory = [...this.chartData.history].sort((a, b) => {
-        const monthOrder = {
-          January: 1,
-          February: 2,
-          March: 3,
-          April: 4,
-          May: 5,
-          June: 6,
-          July: 7,
-          August: 8,
-          September: 9,
-          October: 10,
-          November: 11,
-          December: 12,
-        }
+      const sortedHistory = [...this.chartData.history].sort(
+        (a: BloodPressureHistory, b: BloodPressureHistory) => {
+          const monthOrder: Record<string, number> = {
+            January: 1,
+            February: 2,
+            March: 3,
+            April: 4,
+            May: 5,
+            June: 6,
+            July: 7,
+            August: 8,
+            September: 9,
+            October: 10,
+            November: 11,
+            December: 12,
+          }
 
-        const [monthA, yearA] = a.month.split('. ')
-        const [monthB, yearB] = b.month.split('. ')
+          const [monthA, yearA] = a.month.split('. ')
+          const [monthB, yearB] = b.month.split('. ')
 
-        if (yearA !== yearB) {
-          return parseInt(yearA) - parseInt(yearB)
-        }
+          if (yearA !== yearB) {
+            return parseInt(yearA) - parseInt(yearB)
+          }
 
-        return monthOrder[monthA] - monthOrder[monthB]
-      })
+          return monthOrder[monthA] - monthOrder[monthB]
+        },
+      )
 
       const labels = sortedHistory.map((item) => {
         // Format: "Oct. 2023"

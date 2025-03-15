@@ -19,11 +19,17 @@
 </template>
 
 <script lang="ts">
+interface Diagnostic {
+  name: string
+  description: string
+  status: string
+}
+
 export default {
   name: 'DiagnosticTable',
   props: {
     diagnostics: {
-      type: Array,
+      type: Array as () => Diagnostic[],
       default: () => [],
     },
   },

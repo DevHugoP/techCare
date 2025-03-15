@@ -35,11 +35,18 @@
 <script lang="ts">
 import { computed, ref } from 'vue'
 
+interface Patient {
+  id?: string
+  name: string
+  gender: string
+  age: string
+}
+
 export default {
   name: 'PatientsSidebar',
   props: {
     patients: {
-      type: Array,
+      type: Array as () => Patient[],
       default: () => [],
     },
     activePatient: {
@@ -53,7 +60,7 @@ export default {
     const filteredPatients = computed(() => {
       if (!searchQuery.value) return props.patients
 
-      return props.patients.filter((patient) =>
+      return props.patients.filter((patient: Patient) =>
         patient.name.toLowerCase().includes(searchQuery.value.toLowerCase()),
       )
     })

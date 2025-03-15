@@ -42,6 +42,38 @@ import PatientInfoSidebar from './components/layout/PatientInfoSidebar.vue'
 import PatientsSidebar from './components/layout/PatientsSidebar.vue'
 import { fetchPatientData } from './request.js'
 
+interface Patient {
+  name: string
+  dateOfBirth: string
+  gender: string
+  phone: string
+  emergencyContact: string
+  insurance: string
+  age: string
+  respiratoryRate: number
+  temperature: number
+  heartRate: number
+  bloodPressure: {
+    current: {
+      systolic: number
+      diastolic: number
+    }
+    history: Array<{
+      month: string
+      systolic: number
+      diastolic: number
+    }>
+  }
+  diagnostics: Array<{
+    name: string
+    description: string
+    status: string
+  }>
+  labResults: Array<{
+    name: string
+  }>
+}
+
 export default {
   name: 'App',
   components: {
@@ -53,10 +85,10 @@ export default {
     DiagnosticList,
   },
   setup() {
-    const allPatients = ref([])
-    const selectedPatient = ref({})
+    const allPatients = ref<Patient[]>([])
+    const selectedPatient = ref<Patient | null>(null)
     const isLoading = ref(true)
-    const error = ref(null)
+    const error = ref<string | null>(null)
 
     const fetchData = async () => {
       isLoading.value = true
@@ -64,14 +96,14 @@ export default {
 
       try {
         const data = await fetchPatientData()
-        allPatients.value = data.filter((patient) => patient) || []
+        allPatients.value = data.filter((patient: Patient) => patient) || []
 
         if (allPatients.value.length > 0) {
           selectedPatient.value = allPatients.value[3]
         } else {
           error.value = 'No patient found'
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Fetch data error:', err)
         error.value = err.message || 'An error occurred'
       } finally {

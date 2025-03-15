@@ -70,19 +70,28 @@
 </template>
 
 <script lang="ts">
+interface Patient {
+  name: string
+  dateOfBirth: string | number | Date
+  gender: string
+  phone: string
+  emergencyContact: string
+  insurance: string
+}
+
 export default {
   name: 'PatientView',
   props: {
     patient: {
-      type: Object,
+      type: Object as () => Patient,
       required: true,
     },
   },
   methods: {
-    formatDate(dateString: string | number | Date) {
+    formatDate(dateString: string | number | Date): string {
       if (!dateString) return 'N/A'
 
-      let date
+      let date: Date
       if (typeof dateString === 'string' && dateString.includes('/')) {
         const parts = dateString.split('/')
         date = new Date(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]))
@@ -90,7 +99,7 @@ export default {
         date = new Date(dateString)
       }
 
-      const options = { month: 'long', day: 'numeric', year: 'numeric' }
+      const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' }
       return date.toLocaleDateString('en-US', options)
     },
   },

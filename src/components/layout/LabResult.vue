@@ -19,11 +19,15 @@
 </template>
 
 <script lang="ts">
+interface LabResult {
+  name: string
+}
+
 export default {
   name: 'LabResult',
   props: {
     labResults: {
-      type: Array,
+      type: Array as () => LabResult[],
       default: () => [],
     },
   },
