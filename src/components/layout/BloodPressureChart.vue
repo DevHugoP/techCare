@@ -179,12 +179,19 @@ export default {
                 maxRotation: 0,
                 minRotation: 0,
               },
+              border: {
+                display: false,
+              },
             },
           },
           plugins: {
             legend: {
               display: false,
             },
+          },
+          interaction: {
+            mode: 'index',
+            intersect: false,
           },
           elements: {
             point: {

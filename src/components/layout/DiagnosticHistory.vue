@@ -1,5 +1,5 @@
 <template>
-  <div class="diagnostic-list card">
+  <div class="diagnostic-history card">
     <h3 class="section-title">Diagnosis History</h3>
     <BloodPressureChart :chartData="patient.bloodPressure" />
     <div class="vital-wrapper">
@@ -48,13 +48,15 @@ export default {
       required: true,
     },
   },
-  mounted() {
-    console.log('this.patient', this.patient)
-  },
 }
 </script>
 
 <style scoped>
+.diagnostic-history {
+  overflow: visible;
+  flex-shrink: 0;
+}
+
 .section-title {
   margin-bottom: 1.5rem;
   font-size: 1.25rem;
@@ -119,12 +121,22 @@ export default {
   font-size: 14px;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .arrow {
   margin-right: 5px;
   font-size: 0.7rem;
+}
+
+@media (max-width: 768px) {
+  .vital-wrapper {
+    flex-direction: column;
+  }
+
+  .vital-card {
+    margin-bottom: 1rem;
+  }
 }
 </style>

@@ -73,7 +73,7 @@ export default {
   border-radius: 1rem;
   height: 100%;
   width: 280px;
-  overflow-y: scroll; /* Remplace overflow-y: auto */
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
 }

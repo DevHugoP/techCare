@@ -1,25 +1,22 @@
+-
 <template>
   <div class="diagnostic-list card">
     <h3 class="section-title">Diagnostic List</h3>
 
-    <div class="table-wrapper">
-      <table class="diagnostic-table">
-        <thead>
-          <tr>
-            <th>Problem/Diagnosis</th>
-            <th>Description</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+    <!-- Table header -->
+    <div class="table-header">
+      <div class="header-cell diagnosis-cell">Problem/Diagnosis</div>
+      <div class="header-cell description-cell">Description</div>
+      <div class="header-cell status-cell">Status</div>
+    </div>
 
-        <tbody>
-          <tr v-for="(diag, index) in diagnostics" :key="index">
-            <td>{{ diag.name }}</td>
-            <td>{{ diag.description }}</td>
-            <td>{{ diag.status }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Table body with scroll -->
+    <div class="table-body">
+      <div v-for="(diag, index) in diagnostics" :key="index" class="table-row">
+        <div class="table-cell diagnosis-cell">{{ diag.name }}</div>
+        <div class="table-cell description-cell">{{ diag.description }}</div>
+        <div class="table-cell status-cell">{{ diag.status }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -42,56 +39,89 @@ export default {
   font-size: 24px;
   font-weight: 600;
   color: var(--text-primary-color);
-  margin-bottom: 3rem;
-}
-
-.table-wrapper {
-  overflow: scroll;
-  width: 100%;
 }
 
 .diagnostic-list {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 60%;
+  overflow: hidden;
 }
 
-.diagnostic-table {
-  width: 100%;
-  border-spacing: 0;
-  table-layout: auto;
-}
-
-.diagnostic-table thead tr {
+.table-header {
+  display: flex;
   background-color: #f5f6fa;
   border-radius: 20px;
+  margin-bottom: 8px;
 }
 
-.diagnostic-table thead tr th {
+.table-body {
+  flex: 1;
+  overflow-y: scroll; /* Changé de auto à scroll pour rendre la scrollbar toujours visible */
+  overflow-x: hidden;
+  scrollbar-width: thin; /* Pour Firefox */
+  scrollbar-color: #c0c0c0 #f0f0f0; /* Pour Firefox */
+}
+
+/* Styles de scrollbar personnalisés pour WebKit (Chrome, Safari, Edge) */
+.table-body::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-body::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+.table-body::-webkit-scrollbar-thumb {
+  background-color: #c0c0c0;
+  border-radius: 8px;
+  border: 2px solid #f0f0f0;
+}
+
+.table-body::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.header-cell,
+.table-cell {
   padding: 12px 16px;
   text-align: left;
+}
+
+.header-cell {
   font-weight: 600;
   color: var(--text-primary-color);
   font-size: 14px;
 }
 
-.diagnostic-table thead tr th:first-child {
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-}
-
-.diagnostic-table thead tr th:last-child {
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-
-.diagnostic-table tbody tr td {
-  padding: 16px 16px;
+.table-cell {
   font-size: 14px;
   font-weight: 400;
   color: var(--text-main-color);
+  padding: 16px 16px;
 }
 
-/* Colonne Status avec texte en gris */
-.diagnostic-table tbody tr td:last-child {
-  color: var(--text-main-color);
+.diagnosis-cell {
+  flex: 3;
+}
+
+.description-cell {
+  flex: 5;
+}
+
+.status-cell {
+  flex: 2;
 }
 </style>

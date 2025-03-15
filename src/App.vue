@@ -3,11 +3,11 @@
     <TechCareHeader />
     <main>
       <div v-if="isLoading" class="loading-state">
-        <p>Chargement des données...</p>
+        <p>Loading Data</p>
       </div>
       <div v-else-if="error" class="error-state">
         <p>{{ error }}</p>
-        <button @click="fetchData">Réessayer</button>
+        <button @click="fetchData">Try again</button>
       </div>
       <div v-else class="content-wrapper">
         <div class="content-grid">
@@ -51,7 +51,7 @@ export default {
   },
   setup() {
     const allPatients = ref([])
-    const selectedPatient = ref(3)
+    const selectedPatient = ref({})
     const isLoading = ref(true)
     const error = ref(null)
 
@@ -68,11 +68,11 @@ export default {
           // Sélectionner le premier patient par défaut
           selectedPatient.value = allPatients.value[3]
         } else {
-          error.value = 'Aucun patient trouvé'
+          error.value = 'No patient found'
         }
       } catch (err) {
-        console.error('Erreur dans fetchData:', err)
-        error.value = err.message || 'Une erreur est survenue lors du chargement des données'
+        console.error('Fetch data error:', err)
+        error.value = err.message || 'An error occurred'
       } finally {
         isLoading.value = false
       }
@@ -96,14 +96,14 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: scroll;
   padding: 1rem;
   background-color: var(--bg-main-color);
 }
 
 main {
   flex: 1;
-  overflow: hidden;
+  overflow: scroll;
   display: flex;
   flex-direction: column;
 }
@@ -112,15 +112,15 @@ main {
   flex: 1;
   display: flex;
   margin-top: 1.5rem;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .content-grid {
   display: flex;
   width: 100%;
   gap: 1.5rem;
-  height: 100%;
-  overflow: hidden;
+  height: fit-content;
+  overflow: scroll;
 }
 
 .patient-details-wrapper {
@@ -128,18 +128,18 @@ main {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  overflow: auto;
-  min-width: 0; /* Permet aux éléments flex de rétrécir en dessous de leur taille minimale */
+  overflow: scroll;
+  min-width: 0;
   height: 100%;
 }
 
 .medical-data {
-  flex: 0.8;
+  flex: 0.6;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  overflow: auto;
-  min-width: 0; /* Permet aux éléments flex de rétrécir en dessous de leur taille minimale */
+  overflow: hidden;
+  min-width: 0;
   height: 100%;
 }
 
@@ -167,11 +167,9 @@ main {
   cursor: pointer;
 }
 
-/* Styles pour l'adaptabilité sur les écrans plus petits */
 @media (max-width: 1200px) {
   .content-grid {
     flex-direction: column;
-    overflow-y: auto;
   }
 
   .patient-details-wrapper,

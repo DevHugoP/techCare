@@ -42,7 +42,6 @@ header {
   border-radius: 2rem;
   height: 60px;
   background-color: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .main-nav {
