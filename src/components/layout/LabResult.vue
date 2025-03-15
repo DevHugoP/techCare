@@ -35,11 +35,9 @@ export default {
   background-color: var(--bg-secondary-color);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Garantit que le border-radius est préservé */
+  overflow: hidden;
 }
 
 .section-title {
@@ -53,7 +51,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex: 1;
 }
 

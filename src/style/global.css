@@ -11,16 +11,6 @@
 
   --button-main-color: #01f0d0;
   --button-secondary-color: #f6f7f8;
-
-  --accent-red: #f05b66;
-  --accent-blue: #74cef5;
-  --accent-green: #0bd984;
-
-  --status-active: #2e7d32;
-  --status-observation: #f57c00;
-  --status-untreated: #c62828;
-  --status-cured: #2e7d32;
-  --status-inactive: #616161;
 }
 
 * {
@@ -53,7 +43,6 @@ button {
   background-color: var(--bg-secondary-color);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .action-button {

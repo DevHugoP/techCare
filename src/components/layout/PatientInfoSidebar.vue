@@ -136,9 +136,11 @@ export default {
 <style scoped>
 .patient-view {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   background-color: var(--bg-secondary-color);
   border-radius: 1rem;
+  padding: 1rem;
+  height: 68%;
 }
 
 .profile-section {

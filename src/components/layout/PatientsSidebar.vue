@@ -71,11 +71,11 @@ export default {
 .patients-sidebar {
   background-color: white;
   border-radius: 1rem;
-  height: 100%;
   width: 280px;
-  overflow-y: scroll;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  height: 66rem;
 }
 
 @media (max-width: 1023px) {
@@ -108,8 +108,8 @@ export default {
 }
 
 .patients-list {
-  display: flex;
-  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .patient-item {

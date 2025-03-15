@@ -45,8 +45,10 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 60%;
   overflow: hidden;
+  background-color: var(--bg-secondary-color);
+  border-radius: 1rem;
+  padding: 1.5rem;
 }
 
 .table-header {
@@ -58,10 +60,10 @@ export default {
 
 .table-body {
   flex: 1;
-  overflow-y: scroll; /* Changé de auto à scroll pour rendre la scrollbar toujours visible */
+  overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin; /* Pour Firefox */
-  scrollbar-color: #c0c0c0 #f0f0f0; /* Pour Firefox */
+  height: 100%;
+  max-height: calc(100% - 50px); /* Hauteur moins l'en-tête */
 }
 
 /* Styles de scrollbar personnalisés pour WebKit (Chrome, Safari, Edge) */

@@ -235,7 +235,6 @@ export default {
   background-color: #f4f0fe;
   border-radius: 10px;
   padding: 1.5rem;
-  margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;

@@ -53,8 +53,12 @@ export default {
 
 <style scoped>
 .diagnostic-history {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-secondary-color);
+  border-radius: 1rem;
+  padding: 1.5rem;
   overflow: visible;
-  flex-shrink: 0;
 }
 
 .section-title {

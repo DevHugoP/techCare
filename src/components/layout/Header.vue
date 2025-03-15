@@ -40,6 +40,7 @@ header {
   align-items: center;
   padding: 2rem;
   border-radius: 2rem;
+  margin: 1rem 0.7rem;
   height: 60px;
   background-color: #fff;
 }
