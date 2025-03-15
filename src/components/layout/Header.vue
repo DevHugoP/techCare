@@ -42,15 +42,15 @@ header {
   border-radius: 2rem;
   height: 60px;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .main-nav {
   display: flex;
-  gap: 20px;
+  gap: 5px;
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1200px) {
   .main-nav {
     display: none;
   }

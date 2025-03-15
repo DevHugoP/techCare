@@ -20,7 +20,10 @@
           <span>Systolic</span>
         </div>
         <div class="bp-value">{{ chartData.current.systolic }}</div>
-        <div class="bp-status high">Higher than Average</div>
+        <div class="bp-status">
+          <img src="/src/assets/icons/ArrowUp.svg" alt="low icon" />
+          Higher than Average
+        </div>
       </div>
 
       <div class="bp-indicator">
@@ -29,7 +32,10 @@
           <span>Diastolic</span>
         </div>
         <div class="bp-value">{{ chartData.current.diastolic }}</div>
-        <div class="bp-status low">Lower than Average</div>
+        <div class="bp-status">
+          <img src="/src/assets/icons/ArrowDown.svg" alt="low icon" />
+          Lower than Average
+        </div>
       </div>
     </div>
   </div>
@@ -105,10 +111,12 @@ export default {
       })
 
       const labels = sortedHistory.map((item) => {
-        const parts = item.month.split(' ')
-        const shortMonth = parts[0].slice(0, 3)
-        return `${shortMonth}, ${parts[1]}`
+        // Format: "Oct. 2023"
+        const [month, year] = item.month.split('. ')
+        const shortMonth = month.slice(0, 3)
+        return `${shortMonth}. ${year}`
       })
+
       const systolicData = sortedHistory.map((item) => item.systolic)
       const diastolicData = sortedHistory.map((item) => item.diastolic)
 
@@ -120,20 +128,20 @@ export default {
             {
               label: 'Systolic',
               data: systolicData,
-              borderColor: '#D174E3',
-              backgroundColor: 'rgba(209, 116, 227, 0.2)',
+              borderColor: '#E66FD2',
+              backgroundColor: 'transparent',
               tension: 0.4,
-              pointBackgroundColor: '#D174E3',
-              pointRadius: 4,
+              pointBackgroundColor: '#E66FD2',
+              fill: false,
             },
             {
               label: 'Diastolic',
               data: diastolicData,
-              borderColor: '#6A6DCD',
-              backgroundColor: 'rgba(106, 109, 205, 0.2)',
+              borderColor: '#7E6CAB',
+              backgroundColor: 'transparent',
               tension: 0.4,
-              pointBackgroundColor: '#6A6DCD',
-              pointRadius: 4,
+              pointBackgroundColor: '#8C6FE6',
+              fill: false,
             },
           ],
         },
@@ -146,18 +154,41 @@ export default {
               suggestedMin: 60,
               suggestedMax: 180,
               grid: {
-                color: '#eee',
+                color: 'rgba(200, 200, 200, 0.7)',
+                drawBorder: false,
+                drawTicks: false, // Supprime les petits traits
+              },
+              ticks: {
+                font: {
+                  size: 11,
+                },
+                padding: 10,
+                stepSize: 10,
               },
             },
             x: {
               grid: {
                 display: false,
               },
+              ticks: {
+                color: '#555',
+                font: {
+                  size: 10,
+                },
+                padding: 10,
+                maxRotation: 0,
+                minRotation: 0,
+              },
             },
           },
           plugins: {
             legend: {
               display: false,
+            },
+          },
+          elements: {
+            point: {
+              radius: 5,
             },
           },
         },
@@ -248,9 +279,7 @@ export default {
   flex-direction: column;
   gap: 1.5rem;
   width: 220px;
-  padding-left: 1rem;
-  border-left: 1px solid rgba(0, 0, 0, 0.1); /* Séparateur */
-  align-self: stretch; /* Pour coller à la hauteur du graphique */
+  padding-left: 1.5rem;
 }
 
 .bp-indicator {
@@ -291,20 +320,11 @@ export default {
 }
 
 .bp-status {
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 14px;
+  color: var(--text-secondary-color);
   display: flex;
   align-items: center;
-}
-
-.bp-status.high::before {
-  content: '▲';
-  margin-right: 0.25rem;
-}
-
-.bp-status.low::before {
-  content: '▼';
-  margin-right: 0.25rem;
+  gap: 0.5rem;
 }
 
 @media (max-width: 768px) {

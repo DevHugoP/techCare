@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export default {
   name: 'PatientsSidebar',
@@ -108,6 +108,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  justify-content: center;
 }
 
 .patient-item {
@@ -124,7 +125,7 @@ export default {
 }
 
 .patient-item.active {
-  background-color: var(--button-main-color);
+  background-color: #d8fcf7;
 }
 
 .patient-avatar {
@@ -146,6 +147,7 @@ export default {
 }
 
 .patient-name {
+  font-size: 14px;
   font-weight: 500;
   margin-bottom: 0.25rem;
 }

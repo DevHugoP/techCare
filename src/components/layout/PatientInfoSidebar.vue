@@ -1,4 +1,3 @@
-<!-- PatientView.vue -->
 <template>
   <div class="patient-view">
     <div class="profile-section">
@@ -80,14 +79,13 @@ export default {
     },
   },
   methods: {
-    formatDate(dateString) {
+    formatDate(dateString: string | number | Date) {
       if (!dateString) return 'N/A'
 
-      // Handle both formats: "YYYY-MM-DD" and "MM/DD/YYYY"
       let date
-      if (dateString.includes('/')) {
+      if (typeof dateString === 'string' && dateString.includes('/')) {
         const parts = dateString.split('/')
-        date = new Date(parts[2], parts[0] - 1, parts[1])
+        date = new Date(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]))
       } else {
         date = new Date(dateString)
       }
@@ -96,7 +94,7 @@ export default {
       const options = { month: 'long', day: 'numeric', year: 'numeric' }
       return date.toLocaleDateString('en-US', options)
     },
-    getLatestDiagnosis(metric) {
+    getLatestDiagnosis(metric: string) {
       if (!this.patient.diagnosis_history || this.patient.diagnosis_history.length === 0) {
         return 'N/A'
       }
@@ -117,7 +115,7 @@ export default {
 
       return 'N/A'
     },
-    getStatusClass(status) {
+    getStatusClass(status: string) {
       status = status.toLowerCase()
       if (status.includes('active') || status.includes('treated')) {
         return 'status-active'
