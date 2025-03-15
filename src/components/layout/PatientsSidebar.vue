@@ -1,9 +1,11 @@
-<!-- src/components/layout/PatientsSidebarUpdated.vue -->
+<!-- src/components/layout/PatientsSidebar.vue -->
 <template>
   <div class="patients-sidebar">
     <div class="search-container">
       <h2 class="section-title">Patients</h2>
-      <img src="/src/assets/icons/search.svg" alt="search icon" />
+      <div class="search-icon-wrapper">
+        <img src="/src/assets/icons/search.svg" alt="search icon" class="search-icon" />
+      </div>
     </div>
 
     <div class="patients-list">
@@ -67,65 +69,63 @@ export default {
 
 <style scoped>
 .patients-sidebar {
-  background-color: var(--bg-secondary-color);
+  background-color: white;
   border-radius: 1rem;
-  padding: 1.5rem;
   height: 100%;
-  overflow-y: auto;
+  width: 280px;
+  overflow-y: scroll; /* Remplace overflow-y: auto */
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1023px) {
+  .patients-sidebar {
+    display: none;
+  }
 }
 
 .section-title {
   font-size: 1.25rem;
-  margin-bottom: 1.5rem;
   font-weight: 600;
+  margin: 0;
+  color: #333;
 }
 
 .search-container {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  padding: 20px 15px;
+}
+
+.search-icon-wrapper {
+  cursor: pointer;
 }
 
 .search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-}
-
-.search-container input {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border: none;
-  background-color: var(--bg-main-color);
-  border-radius: 0.5rem;
-  font-size: 0.9rem;
+  width: 20px;
+  height: 20px;
 }
 
 .patients-list {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  justify-content: center;
 }
 
 .patient-item {
   display: flex;
   align-items: center;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+  padding: 15px;
   cursor: pointer;
   position: relative;
 }
 
 .patient-item:hover {
-  background-color: var(--bg-main-color);
+  background-color: #f9f9f9;
 }
 
 .patient-item.active {
-  background-color: #d8fcf7;
+  background-color: #e6f7f5;
 }
 
 .patient-avatar {
@@ -133,7 +133,7 @@ export default {
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 0.75rem;
+  margin-right: 15px;
 }
 
 .patient-avatar img {
@@ -149,18 +149,20 @@ export default {
 .patient-name {
   font-size: 14px;
   font-weight: 500;
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;
+  color: #333;
 }
 
 .patient-details {
-  font-size: 0.8rem;
-  color: var(--text-secondary-color);
+  font-size: 12px;
+  color: #666;
 }
 
 .more-button {
   background: none;
   border: none;
   cursor: pointer;
+  padding: 5px;
 }
 
 .more-button img {

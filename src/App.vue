@@ -30,13 +30,13 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from 'vue'
-import TechCareHeader from './components/layout/Header.vue'
-import PatientInfoSidebar from './components/layout/PatientInfoSidebar.vue'
-import PatientsSidebar from './components/layout/PatientsSidebar.vue'
-import LabResult from './components/layout/LabResult.vue'
+import { onMounted, ref } from 'vue'
 import DiagnosticHistory from './components/layout/DiagnosticHistory.vue'
 import DiagnosticList from './components/layout/DiagnosticList.vue'
+import TechCareHeader from './components/layout/Header.vue'
+import LabResult from './components/layout/LabResult.vue'
+import PatientInfoSidebar from './components/layout/PatientInfoSidebar.vue'
+import PatientsSidebar from './components/layout/PatientsSidebar.vue'
 import { fetchPatientData } from './request.js'
 
 export default {
@@ -92,22 +92,55 @@ export default {
 </script>
 
 <style scoped>
-html,
-body {
-  margin: 0; /* Éviter les marges par défaut qui pourraient provoquer un défilement */
-  padding: 0; /* Enlever tout padding par défaut */
-  height: 100%; /* Assurer que la hauteur est toujours à 100% pour les éléments */
-  width: 100%; /* Assurer que la largeur est toujours à 100% pour les éléments */
+.app-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1rem;
+  background-color: var(--bg-main-color);
 }
 
-.app-wrapper {
-  height: 100vh; /* Assurer que l'application prend toute la hauteur de la fenêtre */
-  overflow: scroll; /* Désactiver également le défilement dans l'app-wrapper */
-  padding: 1rem;
+main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .content-wrapper {
-  overflow: auto; /* Autoriser le défilement uniquement si nécessaire dans la zone de contenu */
+  flex: 1;
+  display: flex;
+  margin-top: 1.5rem;
+  overflow: hidden;
+}
+
+.content-grid {
+  display: flex;
+  width: 100%;
+  gap: 1.5rem;
+  height: 100%;
+  overflow: hidden;
+}
+
+.patient-details-wrapper {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: auto;
+  min-width: 0; /* Permet aux éléments flex de rétrécir en dessous de leur taille minimale */
+  height: 100%;
+}
+
+.medical-data {
+  flex: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: auto;
+  min-width: 0; /* Permet aux éléments flex de rétrécir en dessous de leur taille minimale */
+  height: 100%;
 }
 
 .loading-state,
@@ -122,6 +155,7 @@ body {
   border-radius: 1rem;
   padding: 2rem;
   text-align: center;
+  margin: auto;
 }
 
 .error-state button {
@@ -133,39 +167,17 @@ body {
   cursor: pointer;
 }
 
-.content-wrapper {
-  margin-top: 2rem;
-}
-
-.content-grid {
-  display: flex;
-  gap: 2rem;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.patient-details-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  max-width: 60%;
-}
-
-.medical-data {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-/* @media (max-width: 1400px) {
-  .patient-details-wrapper {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 1100px) {
+/* Styles pour l'adaptabilité sur les écrans plus petits */
+@media (max-width: 1200px) {
   .content-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    overflow-y: auto;
   }
-} */
+
+  .patient-details-wrapper,
+  .medical-data {
+    width: 100%;
+    flex: none;
+  }
+}
 </style>

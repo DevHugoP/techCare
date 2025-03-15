@@ -133,3 +133,63 @@ button {
     width: 100%;
   }
 }
+/* Ajoutez ce code dans src/style/global.css */
+
+/* Style personnalisé pour les barres de défilement */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c0c0c0;
+}
+
+/* Pour Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #e0e0e0 transparent;
+}
+
+/* Style spécifique pour les composants */
+.patients-sidebar::-webkit-scrollbar,
+.diagnostic-list::-webkit-scrollbar,
+.patient-view::-webkit-scrollbar,
+.lab-results::-webkit-scrollbar {
+  width: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 4px;
+}
+
+/* Cacher les barres de défilement quand elles ne sont pas utilisées */
+.patients-sidebar,
+.diagnostic-list,
+.patient-view,
+.lab-results,
+.table-wrapper {
+  scrollbar-gutter: stable;
+}
+
+/* Pour les navigateurs qui ne supportent pas toutes ces propriétés,
+   on peut ajouter un fallback propre */
+@supports not (scrollbar-width: thin) {
+  .patients-sidebar,
+  .diagnostic-list,
+  .patient-view,
+  .lab-results,
+  .table-wrapper {
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+}
