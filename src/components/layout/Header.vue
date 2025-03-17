@@ -52,7 +52,7 @@ header {
 
 .main-nav {
   display: flex;
-  gap: 5px;
+  gap: 1.5rem;
 }
 
 @media (max-width: 1200px) {

@@ -42,7 +42,10 @@
 </template>
 
 <script lang="ts">
-import Chart from 'chart.js/auto'
+import type { ChartType } from 'chart.js'
+import { Chart } from 'chart.js/auto'
+import type { PropType } from 'vue'
+import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 interface BloodPressureHistory {
   month: string
@@ -58,47 +61,29 @@ interface BloodPressureData {
   history: BloodPressureHistory[]
 }
 
-export default {
+export default defineComponent({
   name: 'BloodPressureChart',
   props: {
     chartData: {
-      type: Object as () => BloodPressureData,
+      type: Object as PropType<BloodPressureData>,
       required: true,
     },
   },
-  data() {
-    return {
-      chart: null as Chart | null,
-      resizeObserver: null as ResizeObserver | null,
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.createChart()
-      this.observeResize()
-    })
-  },
-  watch: {
-    chartData: {
-      deep: true,
-      handler() {
-        this.$nextTick(() => {
-          this.updateChart()
-        })
-      },
-    },
-  },
-  methods: {
-    createChart() {
-      const chartElem = this.$refs.bpChart as HTMLCanvasElement | undefined
-      if (!chartElem) return
+  setup(props) {
+    const bpChart = ref<HTMLCanvasElement | null>(null)
+    const chart = ref<Chart | null>(null)
+    let resizeObserver: ResizeObserver | null = null
 
-      const ctx = chartElem.getContext('2d')
+    const createChart = () => {
+      if (!bpChart.value) return
+
+      const ctx = bpChart.value.getContext('2d')
       if (!ctx) return
 
-      if (!this.chartData || !this.chartData.history || this.chartData.history.length === 0) return
+      if (!props.chartData || !props.chartData.history || props.chartData.history.length === 0)
+        return
 
-      const sortedHistory = [...this.chartData.history].sort(
+      const sortedHistory = [...props.chartData.history].sort(
         (a: BloodPressureHistory, b: BloodPressureHistory) => {
           const monthOrder: Record<string, number> = {
             January: 1,
@@ -136,8 +121,12 @@ export default {
       const systolicData = sortedHistory.map((item) => item.systolic)
       const diastolicData = sortedHistory.map((item) => item.diastolic)
 
-      this.chart = new Chart(ctx, {
-        type: 'line',
+      if (chart.value) {
+        chart.value.destroy()
+      }
+
+      chart.value = new Chart(ctx, {
+        type: 'line' as ChartType,
         data: {
           labels: labels,
           datasets: [
@@ -171,7 +160,8 @@ export default {
               suggestedMax: 180,
               grid: {
                 color: 'rgba(200, 200, 200, 0.7)',
-                drawBorder: false,
+                // Enlever la propriété drawBorder qui est problématique
+                // drawBorder: false,
                 drawTicks: false, // Supprime les petits traits
               },
               ticks: {
@@ -216,34 +206,47 @@ export default {
           },
         },
       })
-    },
-    updateChart() {
-      if (this.chart) {
-        this.chart.destroy()
-      }
-      this.createChart()
-    },
-    observeResize() {
-      const container = this.$refs.bpChart?.parentElement
+    }
+
+    const updateChart = () => {
+      createChart()
+    }
+
+    const observeResize = () => {
+      if (!bpChart.value) return
+
+      const container = bpChart.value.parentElement
       if (!container) return
 
-      this.resizeObserver = new ResizeObserver(() => {
-        if (this.chart) {
-          this.chart.resize()
+      resizeObserver = new ResizeObserver(() => {
+        if (chart.value) {
+          chart.value.resize()
         }
       })
-      this.resizeObserver.observe(container)
-    },
-  },
-  beforeUnmount() {
-    if (this.chart) {
-      this.chart.destroy()
+      resizeObserver.observe(container)
     }
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect()
+
+    onMounted(() => {
+      createChart()
+      observeResize()
+    })
+
+    watch(() => props.chartData, updateChart, { deep: true })
+
+    onBeforeUnmount(() => {
+      if (chart.value) {
+        chart.value.destroy()
+      }
+      if (resizeObserver) {
+        resizeObserver.disconnect()
+      }
+    })
+
+    return {
+      bpChart,
     }
   },
-}
+})
 </script>
 
 <style scoped>

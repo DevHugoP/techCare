@@ -19,19 +19,23 @@
 </template>
 
 <script lang="ts">
+import type { PropType } from 'vue'
+import { defineComponent } from 'vue'
+
 interface LabResult {
   name: string
+  downloadable?: boolean
 }
 
-export default {
+export default defineComponent({
   name: 'LabResult',
   props: {
     labResults: {
-      type: Array as () => LabResult[],
+      type: Array as PropType<LabResult[]>,
       default: () => [],
     },
   },
-}
+})
 </script>
 
 <style scoped>

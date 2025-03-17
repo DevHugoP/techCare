@@ -9,16 +9,13 @@
         <p>{{ error }}</p>
         <button @click="fetchData">Try again</button>
       </div>
-      <div v-else class="dashboard-layout">
+      <div v-else-if="selectedPatient" class="dashboard-layout">
         <!-- Sidebar with patients list -->
-        <PatientsSidebar
-          :patients="allPatients"
-          :activePatient="selectedPatient ? selectedPatient.name : ''"
-        />
+        <PatientsSidebar :patients="allPatients" :activePatient="selectedPatient.name" />
 
         <!-- Center content with history and diagnostics -->
         <div class="center-content">
-          <DiagnosticHistory :patient="selectedPatient || {}" />
+          <DiagnosticHistory :patient="selectedPatient" />
           <DiagnosticList :diagnostics="selectedPatient.diagnostics || []" />
         </div>
 
@@ -27,6 +24,10 @@
           <PatientInfoSidebar :patient="selectedPatient" />
           <LabResult :labResults="selectedPatient.labResults || []" />
         </div>
+      </div>
+      <div v-else class="error-container">
+        <p>No patient selected</p>
+        <button @click="fetchData">Try again</button>
       </div>
     </div>
   </div>
@@ -40,9 +41,9 @@ import TechCareHeader from './components/layout/Header.vue'
 import LabResult from './components/layout/LabResult.vue'
 import PatientInfoSidebar from './components/layout/PatientInfoSidebar.vue'
 import PatientsSidebar from './components/layout/PatientsSidebar.vue'
-import { fetchPatientData } from './request.js'
+import { fetchPatientData } from './request'
 
-interface Patient {
+export interface Patient {
   name: string
   dateOfBirth: string
   gender: string
@@ -99,7 +100,9 @@ export default {
         allPatients.value = data.filter((patient: Patient) => patient) || []
 
         if (allPatients.value.length > 0) {
-          selectedPatient.value = allPatients.value[3]
+          // Vérifier si l'index 3 existe avant d'y accéder
+          selectedPatient.value =
+            allPatients.value.length > 3 ? allPatients.value[3] : allPatients.value[0]
         } else {
           error.value = 'No patient found'
         }

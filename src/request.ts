@@ -1,9 +1,10 @@
 import APIClient from './api-client'
+import type { Patient } from './App.vue'
 
 const apiClient = new APIClient('https://fedskillstest.coalitiontechnologies.workers.dev')
 apiClient.setBasicAuth('coalition', 'skills-test')
 
-export async function fetchPatientData() {
+export async function fetchPatientData(): Promise<Patient[]> {
   try {
     const data = await apiClient.get()
 
@@ -12,14 +13,14 @@ export async function fetchPatientData() {
     }
 
     const patientsArray = Array.isArray(data) ? data : [data]
-    return patientsArray.map((patient) => formatPatientData(patient)).filter(Boolean)
+    return patientsArray.map((patient) => formatPatientData(patient)).filter(Boolean) as Patient[]
   } catch (error) {
     console.error('API call error:', error)
     throw error
   }
 }
 
-function formatPatientData(patientData) {
+function formatPatientData(patientData: any): Patient | null {
   if (!patientData || !patientData.name) {
     return null
   }
@@ -44,26 +45,31 @@ function formatPatientData(patientData) {
           },
           history: processBloodPressureHistory(diagnosisHistory),
         }
-      : null,
+      : {
+          current: { systolic: 0, diastolic: 0 },
+          history: [],
+        },
 
-    respiratoryRate: latestDiagnosis ? latestDiagnosis.respiratory_rate.value : null,
-    temperature: latestDiagnosis ? latestDiagnosis.temperature.value : null,
-    heartRate: latestDiagnosis ? latestDiagnosis.heart_rate.value : null,
+    respiratoryRate: latestDiagnosis ? latestDiagnosis.respiratory_rate.value : 0,
+    temperature: latestDiagnosis ? latestDiagnosis.temperature.value : 0,
+    heartRate: latestDiagnosis ? latestDiagnosis.heart_rate.value : 0,
 
-    diagnostics: (patientData.diagnostic_list || []).map((diag) => ({
+    diagnostics: (patientData.diagnostic_list || []).map((diag: any) => ({
       name: diag.name,
       description: diag.description,
       status: diag.status,
     })),
 
-    labResults: (patientData.lab_results || []).map((lab) => ({
+    labResults: (patientData.lab_results || []).map((lab: string) => ({
       name: lab,
       downloadable: true,
     })),
   }
 }
 
-function processBloodPressureHistory(diagnosisHistory) {
+function processBloodPressureHistory(
+  diagnosisHistory: any[],
+): { month: string; systolic: number; diastolic: number }[] {
   if (!Array.isArray(diagnosisHistory) || diagnosisHistory.length === 0) {
     return []
   }
