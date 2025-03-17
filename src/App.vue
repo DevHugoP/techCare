@@ -10,16 +10,13 @@
         <button @click="fetchData">Try again</button>
       </div>
       <div v-else-if="selectedPatient" class="dashboard-layout">
-        <!-- Sidebar with patients list -->
         <PatientsSidebar :patients="allPatients" :activePatient="selectedPatient.name" />
 
-        <!-- Center content with history and diagnostics -->
         <div class="center-content">
           <DiagnosticHistory :patient="selectedPatient" />
           <DiagnosticList :diagnostics="selectedPatient.diagnostics || []" />
         </div>
 
-        <!-- Right content with patient info and lab results -->
         <div class="right-content">
           <PatientInfoSidebar :patient="selectedPatient" />
           <LabResult :labResults="selectedPatient.labResults || []" />
@@ -100,7 +97,6 @@ export default {
         allPatients.value = data.filter((patient: Patient) => patient) || []
 
         if (allPatients.value.length > 0) {
-          // Vérifier si l'index 3 existe avant d'y accéder
           selectedPatient.value =
             allPatients.value.length > 3 ? allPatients.value[3] : allPatients.value[0]
         } else {

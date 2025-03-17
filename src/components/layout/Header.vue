@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import BaseButton from '@/components/base/BaseButton.vue'
+import BaseButton from '../base/BaseButton.vue'
 export default {
   name: 'TechCareHeader',
   components: { BaseButton },
