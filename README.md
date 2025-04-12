@@ -14,6 +14,5 @@ to run the app use the following command :
 
 Hugo Polchetti
 
-# techCare
 
 ![techCare Logo](https://github.com/user-attachments/assets/bc4d2199-d893-4bb2-af50-771e05c53913)
