@@ -1,6 +1,8 @@
 # techCare
 
-This project is a technical test please to after downloading the project
+This project is a technical test 
+
+after downloading the project
 
 - cd techCare
 
